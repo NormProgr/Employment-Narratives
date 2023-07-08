@@ -1,6 +1,6 @@
-## Inflation Narratives
+# Inflation Narratives
 
-# Scope of Project
+## Scope of Project
 
 I provide an economic application to Inflation Narratives in global news outlets like CNN (Cable News Network). For that I will scrape the data from CNNs website and categorize it using the classification categories of [Inflation Narratives](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4026601).
 
