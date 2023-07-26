@@ -1,6 +1,6 @@
 ---
 name: EN
-channels: [conda-forge, nodefaults]
+channels: [huggingface, pytorch, conda-forge, nodefaults]
 dependencies:
   - conda-lock
   - ipykernel
@@ -22,4 +22,22 @@ dependencies:
   - setuptools_scm
   - statsmodels
   - toml
-  - pip: [-e ., kaleido]
+
+  # basics
+  - numpy
+  - scipy
+  - pandas
+  - matplotlib
+  - seaborn
+
+  # sklearn
+  - scikit-learn
+  - scikit-image
+
+  # huggingface
+  - transformers
+  - tokenizers
+  - datasets
+  - sentencepiece
+  - pip
+  - pip: [torch, torchvision, torchtext, 'huggingface_hub[cli]', e ., kaleido]
