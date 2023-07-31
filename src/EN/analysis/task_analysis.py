@@ -9,6 +9,7 @@ from EN.config import BLD, GROUPS, SRC
 from EN.utilities import read_yaml
 
 
+@pytask.mark.skip
 @pytask.mark.depends_on(
     {
         "scripts": ["model.py", "predict.py"],

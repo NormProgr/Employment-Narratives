@@ -8,6 +8,7 @@ from EN.data_management import clean_data
 from EN.utilities import read_yaml
 
 
+@pytask.mark.skip
 @pytask.mark.depends_on(
     {
         "scripts": ["clean_data.py"],
