@@ -39,5 +39,10 @@ dependencies:
   - tokenizers
   - datasets
   - sentencepiece
-  - pip
-  - pip: [torch, torchvision, torchtext, 'huggingface_hub[cli]', e ., kaleido]
+  - pip: 
+    - torch
+    - torchvision
+    - torchtext 
+    - 'huggingface_hub[cli]'
+    - -e .
+    -  kaleido
