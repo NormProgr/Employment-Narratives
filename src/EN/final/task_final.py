@@ -15,6 +15,7 @@ for group in GROUPS:
         "produces": BLD / "python" / "figures" / f"smoking_by_{group}.png",
     }
 
+    @pytask.mark.skip
     @pytask.mark.depends_on(
         {
             "data_info": SRC / "data_management" / "data_info.yaml",
@@ -31,6 +32,7 @@ for group in GROUPS:
         fig.write_image(produces)
 
 
+@pytask.mark.skip
 @pytask.mark.depends_on(BLD / "python" / "models" / "model.pickle")
 @pytask.mark.produces(BLD / "python" / "tables" / "estimation_results.tex")
 def task_create_results_table_python(depends_on, produces):
