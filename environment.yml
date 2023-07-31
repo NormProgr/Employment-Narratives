@@ -5,7 +5,6 @@ dependencies:
   - conda-lock
   - ipykernel
   - jupyterlab
-  - pandas
   - pdbpp
   - pip >=21.1
   - plotly>=5.13.0
@@ -40,9 +39,9 @@ dependencies:
   - datasets
   - sentencepiece
   - pip: 
-    - torch
-    - torchvision
-    - torchtext 
-    - 'huggingface_hub[cli]'
-    - -e .
-    -  kaleido
+      - torch
+      - torchvision
+      - torchtext 
+      - 'huggingface_hub[cli]'
+      - -e .
+      - kaleido
