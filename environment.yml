@@ -42,6 +42,6 @@ dependencies:
       - torch
       - torchvision
       - torchtext 
-      - 'huggingface_hub[cli]'
+      - huggingface_hub[cli]
       - -e .
       - kaleido
