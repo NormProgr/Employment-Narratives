@@ -26,8 +26,11 @@ them.
 To get started, create and activate the environment with
 
 ```console
-$ conda/mamba env create
+$ git clone https://github.com/iame-uni-bonn/final-project-NormProgr.git
+$ cd final-project-NormProgr
+$ conda env create -f environment.yml
 $ conda activate EN
+$ pre-commit install
 ```
 
 To build the project, type
