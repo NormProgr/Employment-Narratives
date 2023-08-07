@@ -1,9 +1,9 @@
 """Function(s) for cleaning the data set(s)."""
 
-import pandas as pd
+from kaggle.api.kaggle_api_extended import KaggleApi
 
 
-def load_data(data, data_info):
+def authenticate_to_kaggle(data, data_info):
     """Clean data set.
 
     Information on data columns is stored in ``data_management/data_info.yaml``.
@@ -24,13 +24,7 @@ def load_data(data, data_info):
         pandas.DataFrame: The cleaned data set.
 
     """
-    data = data.drop(columns=data_info["columns_to_drop"])
-    data = data.dropna()
-    for cat_col in data_info["categorical_columns"]:
-        data[cat_col] = data[cat_col].astype("category")
-    data = data.rename(columns=data_info["column_rename_mapping"])
-
-    numerical_outcome = pd.Categorical(data[data_info["outcome"]]).codes
-    data[data_info["outcome_numerical"]] = numerical_outcome
+    api = KaggleApi()
+    api.authenticate()
 
     return data
