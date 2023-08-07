@@ -1,11 +1,20 @@
 """Tasks for managing the data."""
-
 import pandas as pd
 import pytask
 
 from EN.config import BLD, SRC
-from EN.data_management import clean_data
+from EN.data_management import authenticate_to_kaggle, clean_data
 from EN.utilities import read_yaml
+
+
+@pytask.mark.produces(BLD / "python" / "data" / "cnn-articles-after-basic-cleaning.zip")
+def task_load_data_python(produces):
+    """Clean the data (Python version)."""
+    api = authenticate_to_kaggle()
+    dataset = "hadasu92/cnn-articles-after-basic-cleaning"
+    cnn_zip = api.dataset_download_files(dataset)
+    with open(produces, "wb") as output_file:
+        output_file.write(cnn_zip)
 
 
 @pytask.mark.skip
