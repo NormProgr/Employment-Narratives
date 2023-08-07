@@ -35,6 +35,11 @@ $ conda activate EN
 $ pre-commit install
 ```
 
+In addition, you need to have a kaggle account and an API token. You can find
+Instruction on how to get one [here](https://www.kaggle.com/docs/api). Then, you need to
+download your personalized token called `kaggle.json` in the `users/<username>/.kaggle/`
+folder.
+
 To build the project, type
 
 ```console

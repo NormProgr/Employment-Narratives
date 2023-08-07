@@ -22,6 +22,8 @@ dependencies:
   - statsmodels
   - toml
 
+  # data
+  - kaggle
   # basics
   - numpy
   - scipy
@@ -38,10 +40,10 @@ dependencies:
   - tokenizers
   - datasets
   - sentencepiece
-  - pip: 
+  - pip:
       - torch
       - torchvision
-      - torchtext 
+      - torchtext
       - huggingface_hub[cli]
       - -e .
       - kaleido
