@@ -23,19 +23,6 @@ def task_load_data_python(produces):
         zip_ref.extractall(produces)
 
 
-# with zipfile.ZipFile('my_archive.zip', 'w') as zipf:
-# Add files to the archive
-
-
-# with zipfile.ZipFile(cnn_zip, 'r') as zip_ref:
-
-
-# with open(cnn_zip, "w") as output_file:
-
-
-# with zipfile.ZipFile("cnn-articles-after-basic-cleaning.zip", "r") as cnn_zip:
-
-
 @pytask.mark.skip
 @pytask.mark.depends_on(
     {
