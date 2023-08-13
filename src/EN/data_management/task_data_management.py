@@ -1,4 +1,6 @@
 """Tasks for managing the data."""
+import zipfile
+
 import pandas as pd
 import pytask
 
@@ -12,15 +14,42 @@ def task_load_data_python(produces):
     """Clean the data (Python version)."""
     api = authenticate_to_kaggle()
     dataset = "hadasu92/cnn-articles-after-basic-cleaning"
-    try:
-        cnn_zip = api.dataset_download_files(dataset)
-        if cnn_zip is None:
-            print("API call returned None.")
-        else:
-            with open(produces, "wb") as output_file:
-                output_file.write(cnn_zip)
-    except Exception as e:
-        print("An error occurred:", str(e))
+    api.dataset_download_files(dataset)
+    with zipfile.ZipFile("cnn-articles-after-basic-cleaning.zip", "r") as zip_ref:
+        zip_ref.extractall(produces)
+
+
+@pytask.mark.skip
+@pytask.mark.depends_on(SRC / "data" / "cepr_march.zip")
+@pytask.mark.produces(BLD / "python" / "data")
+def task_unzip(depends_on, produces):
+    """Task for unzipping data."""
+    with zipfile.ZipFile(depends_on, "r") as zip_ref:
+        zip_ref.extractall(produces)
+
+
+@pytask.mark.skip
+@pytask.mark.produces(BLD / "python" / "data" / "cnn-articles-after-basic-cleaning.zip")
+def task_load_data_python(produces):
+    """Clean the data (Python version)."""
+    # kaggle datasets download -d hadasu92/cnn-articles-after-basic-cleaning
+    cnn_zip = os.system(
+        'kaggle datasets download -d "hadasu92/cnn-articles-after-basic-cleaning"',
+    )
+    with open(produces, "wb") as output_file:
+        output_file.write(cnn_zip)
+
+    #    if cnn_zip is None:
+    #        with open(produces, "wb") as output_file:
+
+
+@pytask.mark.skip
+@pytask.mark.depends_on(SRC / "data" / "cepr_march.zip")
+@pytask.mark.produces(BLD / "python" / "data")
+def task_unzip(depends_on, produces):
+    """Task for unzipping data."""
+    with zipfile.ZipFile(depends_on, "r") as zip_ref:
+        zip_ref.extractall(produces)
 
 
 @pytask.mark.skip
