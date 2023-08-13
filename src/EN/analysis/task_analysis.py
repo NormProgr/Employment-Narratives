@@ -19,13 +19,14 @@ from EN.utilities import read_yaml
 )
 @pytask.mark.produces(BLD / "python" / "models" / "model.pickle")
 def task_fit_model_python(depends_on, produces):
-    """Fit a logistic regression model (Python version)."""
+    "Fit a logistic regression model (Python version)."
     data_info = read_yaml(depends_on["data_info"])
     data = pd.read_csv(depends_on["data"])
     model = fit_logit_model(data, data_info, model_type="linear")
     model.save(produces)
 
 
+# @pytask.mark.skip
 for group in GROUPS:
     kwargs = {
         "group": group,
@@ -38,9 +39,10 @@ for group in GROUPS:
             "model": BLD / "python" / "models" / "model.pickle",
         },
     )
+    @pytask.mark.skip
     @pytask.mark.task(id=group, kwargs=kwargs)
     def task_predict_python(depends_on, group, produces):
-        """Predict based on the model estimates (Python version)."""
+        "Predict based on the model estimates (Python version)."
         model = load_model(depends_on["model"])
         data = pd.read_csv(depends_on["data"])
         predicted_prob = predict_prob_by_age(data, model, group)
