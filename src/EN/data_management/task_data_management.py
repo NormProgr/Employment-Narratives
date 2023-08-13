@@ -12,9 +12,15 @@ def task_load_data_python(produces):
     """Clean the data (Python version)."""
     api = authenticate_to_kaggle()
     dataset = "hadasu92/cnn-articles-after-basic-cleaning"
-    cnn_zip = api.dataset_download_files(dataset)
-    with open(produces, "wb") as output_file:
-        output_file.write(cnn_zip)
+    try:
+        cnn_zip = api.dataset_download_files(dataset)
+        if cnn_zip is None:
+            print("API call returned None.")
+        else:
+            with open(produces, "wb") as output_file:
+                output_file.write(cnn_zip)
+    except Exception as e:
+        print("An error occurred:", str(e))
 
 
 @pytask.mark.skip
