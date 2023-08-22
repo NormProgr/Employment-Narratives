@@ -46,7 +46,7 @@ To build the project, type
 $ pytask
 ```
 
-## Questions
+## Questions & Answers
 
 1. List five different tasks that belong to the field of natural language processing.
    1. Text classification
@@ -97,8 +97,8 @@ $ pytask
 1. How can you write pytorch code that uses a GPU if it is available but also runs on a
    laptop that does not have a GPU.
    1. If you run the following code and check which state is true GPU or CPU. You are
-      able to run it on all machines. ```torch.device("cuda" if torch.cuda.is_available()
-      else "cpu")```
+      able to run it on all machines.
+      `torch.device("cuda" if torch.cuda.is_available() else "cpu")`
 1. How many trainable parameters would the neural network in this video have if we
    remove the second hidden layer but leave it otherwise unchanged.
    1. There should be 12730 trainable parameters if the second hidden layer is excluded.
