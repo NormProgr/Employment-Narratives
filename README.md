@@ -46,6 +46,129 @@ To build the project, type
 $ pytask
 ```
 
+## Questions
+
+1. List five different tasks that belong to the field of natural language processing.
+   1. Text classification
+   1. Named Entity Recognition
+   1. Machine Translation
+   1. Text Generation
+   1. Question Answering
+1. What is the fundamental difference between econometrics/statistics and suprevised
+   machine learning
+   1. Econometrics estimates unobservable parameters and tests hypotheses about them.
+      Therefore, one does not know how well it worked. Whereas supervised machine
+      learning predicts observable things and can check/evaluate how well it worked.
+1. Can you use stochastic gradient descent to tune the hyperparameters of a random
+   forrest. If not, why?
+   1. No, SGD can be just applied to functions that are differentiable. Random forests
+      are not differentiable because they are based on decision trees which are binary
+      and therefore not differentiable. Additionally, both concepts address different
+      problems. SGD optimizes the parameters of a single model through iterative
+      updates, while Random Forrest hyperparameters determine ensemble behavior of many
+      decision trees e.g. through grid search.
+1. What is imbalanced data and why can it be a problem in machine learning?
+   1. Imbalanced data describes a dataset with unequal distribution of
+      classes/categories. It can lead to overfitting, loss of important info or a bias
+      towards the majority class.
+1. Why are samples split into training and test data in machine learning?
+   1. Samples are split into training and test data to assess how well a trained model
+      generalizes to new, unseen data. This way the applied model can be evaluated.
+1. Describe the pros and cons of word and character level tokenization.
+   1. Word tokenization is simple, preserves the word structure and there are not too
+      many words to deal with. But it has problems to deal with typos, word variation,
+      morphologies or incomplete words. Whereas Character tokenization is even simpler,
+      has a tiny vocabulary size and there are no unknown words but the tokenized texts
+      are longer and it loses the entire word structure.
+1. Why does fine-tuning usually give you a better performing model than feature
+   extraction?
+   1. This is because in fine-tuning, all model parameters, including the last hidden
+      state, are optimized for the task, whereas in feature extraction, only the
+      classifier is trained, the performance is then depending on the potentially
+      coincidental relevance of the last hidden state.
+1. What are advantages over feature extraction over fine-tuning.
+   1. Feature extraction is less computationally intensive and can run on a CPU. On the
+      other hand, fine-tuning, due to its slowness on a CPU, requires a GPU for
+      efficient processing.
+1. Why are neural networks trained on GPUs or other specialized hardware?
+   1. Neural Networks are inherent parallel algorithms. GPUs have much more cores (even
+      though smaller ones) than CPUs and are better at handling a lot of parallelized
+      tasks.
+1. How can you write pytorch code that uses a GPU if it is available but also runs on a
+   laptop that does not have a GPU.
+   1. If you run the following code and check which state is true GPU or CPU. You are
+      able to run it on all machines. torch.device("cuda" if torch.cuda.is_available()
+      else "cpu")
+1. How many trainable parameters would the neural network in this video have if we
+   remove the second hidden layer but leave it otherwise unchanged.
+   1. There should be 12730 trainable parameters if the second hidden layer is excluded.
+1. Why are nonlinearities used in neural networks? Name at least three different
+   nonlinearities.
+   1. Without nonlinearities we would simply have a linear model that would not be able
+      to capture the complex relationships in a lot of data.
+   1. Three Nonlinearities: Rectified Linear Unit (ReLU), Sigmoid, Hyperbolic Tangent
+      (tanh)
+1. Some would say that softmax is a bad name. What would be a better name and why?
+   1. "SoftArgmax" would be a more appropriate term because it indicates the underlying
+      mathematical operation. The "Softmax" function isn't a softened version of the
+      maximum itself, but rather a softened version of the one-hot encoded "argmax."
+1. What is the purpose of DataLoaders in pytorch?
+   1. DataLoaders makes it easy to loop over batches of the data and the batches can be
+      loaded in parallel.
+1. Name a few different optimizers that are used to train deep neural networks
+   1. SGD (stochastic gradient descent)
+   1. SDG + Momentum
+   1. Adam (Adaptive Moment Estimation)
+   1. RMSprop (Root Mean Square Propagation)
+   1. Adagrad (Adaptive Gradient Algorithm)
+1. What happens when the batch size during the optimization is set too small?
+   1. When the batch size becomes too small, updates to the model's parameters become
+      erratic, leading to unpredictable and inconsistent changes during each
+      optimization iteration. But also the optimization is computational fast.
+1. What happens when the batch size diring the optimization is set too large?
+   1. Too large batch sizes lead to overfitting of the model. It also requires a lot
+      more computational power.
+1. Why can the feed-forward neural network we implemented for image classification not
+   be used for language modelling?
+   1. For language modelling we need neural networks that are able to capture sequential
+      data by maintaining hidden states that capture context over time. In a
+      feed-forward neural network information just flows in one direction, which is
+      enough for image classification that has no context over time (at least in our
+      case).
+1. Why is an encoder-decoder architecture used for machine translation (instead of the
+   simpler encoder only architecture we used for language modelling)
+   1. The encoder-decoder architecture is employed in machine translation to
+      comprehensively understand source sentences bidirectionally. The encoder captures
+      semantic meaning, while the decoder translates. Unlike simpler encoders, this
+      approach grasps context, idiomatic expressions, and linguistic nuances.
+1. Is it a good idea to base your final project on a paper or blogpost from 2015? Why or
+   why not?
+   1. If the paper or blogpost had computational or methodological limitations but
+      interesting data it would be interesting to solve these issues now (e.g. handling
+      machine translation). But using methods from 2015 would limit the analysis of my
+      final paper as the scientific improvements were significant the last years
+      (especially because of transformers).
+1. Do you agree with the following sentence: To get the best model performance, you
+   should train a model from scratch in Pytorch so you can influence every step of the
+   process.
+   1. Disagree. Pre-built models are often numerically optimized and computationally
+      efficient. Creating and pre-training a new model from scratch is time-consuming.
+      However, customizing specific components can be valuable. Combining pre-trained
+      models with tailored elements strikes a balance between efficiency and
+      customization in model development.
+1. What is an example of an encoder-only model?
+   1. BERT is an example of an encoder-only model.
+1. What is the vanishing gradient problem and how does it affect training?
+   1. The vanishing gradient problem occurs in neural networks (like RNN) when gradients
+      of the loss function become extremely small during training, hindering updates to
+      early layers. It affects training by preventing these layers from learning complex
+      patterns, leading to suboptimal performance.
+1. Which model has a longer memory: RNN or Transformer?
+   1. Transformers generally have longer memory compared to RNN. This is due to the
+      vanishing gradient problems of RNN.
+1. What is the fundamental component of the transformer architecture?
+   1. The fundamental component is the “Attention” mechanism.
+
 ## Credits
 
 This project was created with [cookiecutter](https://github.com/audreyr/cookiecutter)
