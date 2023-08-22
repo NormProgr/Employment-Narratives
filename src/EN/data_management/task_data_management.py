@@ -18,22 +18,35 @@ def task_load_data_python(produces):
     """
     api = authenticate_to_kaggle()
     dataset = "hadasu92/cnn-articles-after-basic-cleaning"
-    api.dataset_download_files(dataset)  # cnn_zip =
+    api.dataset_download_files(dataset)
     with zipfile.ZipFile("cnn-articles-after-basic-cleaning.zip", "r") as zip_ref:
         zip_ref.extractall(produces)
 
 
-@pytask.mark.skip
+# @pytask.mark.skip
 @pytask.mark.depends_on(
     {
         "scripts": ["clean_data.py"],
         "data_info": SRC / "data_management" / "data_info.yaml",
-        "data": SRC / "data" / "data.csv",
+        "Article_1": BLD
+        / "python"
+        / "data"
+        / "cnn-articles-after-basic-cleaning.zip"
+        / "CNN_Articels_clean"
+        / "CNN_Articels_clean.csv",
+        "Article_2": BLD
+        / "python"
+        / "data"
+        / "cnn-articles-after-basic-cleaning.zip"
+        / "CNN_Articels_clean_2"
+        / "CNN_Articels_clean.csv",
     },
 )
 @pytask.mark.produces(BLD / "python" / "data" / "data_clean.csv")
 def task_clean_data_python(depends_on, produces):
+    "Clean the data from unwanted categories and concetenate the raw files."
+    df_1 = pd.read_csv(depends_on["Article_1"])
+    df_2 = pd.read_csv(depends_on["Article_2"])
     data_info = read_yaml(depends_on["data_info"])
-    data = pd.read_csv(depends_on["data"])
-    data = clean_data(data, data_info)
+    data = clean_data(df_1, df_2, data_info)
     data.to_csv(produces, index=False)

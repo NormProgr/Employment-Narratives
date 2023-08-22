@@ -3,7 +3,7 @@
 import pandas as pd
 
 
-def clean_data(data, data_info):
+def clean_data(data_1, data_2, data_info):
     """Clean data set.
 
     Information on data columns is stored in ``data_management/data_info.yaml``.
@@ -12,25 +12,44 @@ def clean_data(data, data_info):
         data (pandas.DataFrame): The data set.
         data_info (dict): Information on data set stored in data_info.yaml. The
             following keys can be accessed:
-            - 'outcome': Name of dependent variable column in data
-            - 'outcome_numerical': Name to be given to the numerical version of outcome
-            - 'columns_to_drop': Names of columns that are dropped in data cleaning step
-            - 'categorical_columns': Names of columns that are converted to categorical
-            - 'column_rename_mapping': Old and new names of columns to be renamend,
-                stored in a dictionary with design: {'old_name': 'new_name'}
+            - 'Index': Running number
+            - 'Author': Author who wrote Article
+            - 'Date published': Publishing date of Article
+            - 'Category': Higher level category of Article
+            - 'Section': Lower level category of Article
             - 'url': URL to data set
+            - 'Headline': Headline of Article
+            - 'Description': Short Summary of Article
+            - 'Keywords': Keywords of Article
+            - 'Second headline': Second Headline of Article
+            - 'Article text': Full article text
 
     Returns:
         pandas.DataFrame: The cleaned data set.
 
     """
+    if not set(data_1.columns) == set(data_2.columns):
+        raise ValueError("Both datasets must have the same columns.")
+    merged_dataset = pd.concat([data_1, data_2], axis=0)
+    # put this into task
+    merged_dataset = _drop_columns(merged_dataset, data_info)
+    return merged_dataset
+
+
+def _drop_columns(data, data_info):
+    """Drop columns from data set.
+
+    Args:
+        data (pandas.DataFrame): The data set.
+        columns_to_drop (list): List of columns to drop.
+
+    Returns:
+        pandas.DataFrame: The data set without the dropped columns.
+
+    """
     data = data.drop(columns=data_info["columns_to_drop"])
     data = data.dropna()
-    for cat_col in data_info["categorical_columns"]:
-        data[cat_col] = data[cat_col].astype("category")
-    data = data.rename(columns=data_info["column_rename_mapping"])
-
-    numerical_outcome = pd.Categorical(data[data_info["outcome"]]).codes
-    data[data_info["outcome_numerical"]] = numerical_outcome
-
-    return data
+    filtered_df = data[
+        ~data[data_info["column_name"]].isin(data_info["values_to_remove"])
+    ]
+    return filtered_df
