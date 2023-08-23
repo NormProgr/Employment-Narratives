@@ -23,7 +23,6 @@ def task_load_data_python(produces):
         zip_ref.extractall(produces)
 
 
-# @pytask.mark.skip
 @pytask.mark.depends_on(
     {
         "scripts": ["clean_data.py"],
@@ -44,7 +43,7 @@ def task_load_data_python(produces):
 )
 @pytask.mark.produces(BLD / "python" / "data" / "data_clean.csv")
 def task_clean_data_python(depends_on, produces):
-    "Clean the data from unwanted categories and concetenate the raw files."
+    "Clean the data from unwanted categories and concetenate the raw files. Instead of using to_csv we should use to pickle."
     df_1 = pd.read_csv(depends_on["Article_1"])
     df_2 = pd.read_csv(depends_on["Article_2"])
     data_info = read_yaml(depends_on["data_info"])
