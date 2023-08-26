@@ -12,9 +12,6 @@ dependencies:
   - pytask-latex
   - pytask-parallel
   - pytask>=0.2
-  - pytest
-  - pytest-cov
-  - pytest-xdist
   - python-graphviz
   - python=3.11
   - pyyaml
