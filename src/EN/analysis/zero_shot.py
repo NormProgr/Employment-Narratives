@@ -1,6 +1,5 @@
 """Functions for fitting the regression model."""
 
-import statsmodels.formula.api as smf
 from statsmodels.iolib.smpickle import load_pickle
 
 
