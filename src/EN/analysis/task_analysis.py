@@ -5,8 +5,22 @@ import pytask
 
 from EN.analysis.model import fit_logit_model, load_model
 from EN.analysis.predict import predict_prob_by_age
+from EN.analysis.zero_shot import zero_shot_classifier
 from EN.config import BLD, GROUPS, SRC
 from EN.utilities import read_yaml
+
+
+@pytask.mark.depends_on(
+    {
+        "scripts": ["zero_shot.py"],
+        "data": BLD / "python" / "data" / "data_clean",
+    },
+)
+@pytask.mark.produces(BLD / "python" / "models" / "model.pickle")
+def task_fit_model_python(depends_on, produces):
+    "Fit a logistic regression model (Python version)."
+    zero_shot_classifier(depends_on)
+    pass
 
 
 @pytask.mark.skip
