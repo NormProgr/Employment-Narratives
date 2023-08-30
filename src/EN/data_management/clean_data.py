@@ -1,6 +1,7 @@
 """Function(s) for cleaning the data set(s)."""
 
 import pandas as pd
+from datasets import Dataset, DatasetDict
 
 
 def clean_data(data_1, data_2, data_info):
@@ -33,6 +34,7 @@ def clean_data(data_1, data_2, data_info):
     merged_dataset = pd.concat([data_1, data_2], axis=0)
     # put this into task
     merged_dataset = _drop_columns(merged_dataset, data_info)
+    merged_dataset = _pd_to_dataset(merged_dataset)
     return merged_dataset
 
 
@@ -53,3 +55,10 @@ def _drop_columns(data, data_info):
         ~data[data_info["column_name"]].isin(data_info["values_to_remove"])
     ]
     return filtered_df
+
+
+def _pd_to_dataset(data):
+    data = Dataset.from_pandas(data)
+    dataset_dict = DatasetDict({"my_dataset": data})
+    torch_data = dataset_dict["my_dataset"]
+    return torch_data

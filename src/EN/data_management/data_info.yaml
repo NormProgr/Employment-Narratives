@@ -1,4 +1,12 @@
 ---
-columns_to_drop: [Url, Headline, Description, Second headline]
+columns_to_drop:
+  - Url
+  - Headline
+  - Description
+  - Second headline
+  - Index
+  - Author
+  - Section
+  - Keywords
 column_name: Category
 values_to_remove: [sport, entertainment, style]
