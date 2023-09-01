@@ -1,4 +1,5 @@
 """Tasks for managing the data."""
+import pathlib
 import zipfile
 
 import pandas as pd
@@ -45,6 +46,10 @@ def task_load_data_python(produces):
 # @pytask.mark.produces(BLD / "python" / "data" / "data_clean.csv")
 def task_clean_data_python(depends_on, produces):
     "Clean the data from unwanted categories and concetenate the raw files. Instead of using to_csv we should use to pickle."
+    cache_folder = pathlib.Path(produces)
+    for file in cache_folder.iterdir():
+        if file.is_file() and file.name.endswith(".cache"):
+            file.unlink()  # Delete the cache file
     df_1 = pd.read_csv(depends_on["Article_1"])  # need to delete cache here
     df_2 = pd.read_csv(
         depends_on["Article_2"],
