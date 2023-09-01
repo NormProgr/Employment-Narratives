@@ -1,13 +1,21 @@
 """Tasks running the core analyses."""
 
+import random
+
 import pandas as pd
 import pytask
+import torch
 
 from EN.analysis.model import fit_logit_model, load_model
 from EN.analysis.predict import predict_prob_by_age
 from EN.analysis.zero_shot import zero_shot_classifier
 from EN.config import BLD, GROUPS, SRC
 from EN.utilities import read_yaml
+
+seed = 42
+random.seed(seed)
+torch.manual_seed(seed)
+torch.cuda.manual_seed_all(seed)
 
 
 @pytask.mark.depends_on(
@@ -16,10 +24,12 @@ from EN.utilities import read_yaml
         "data": BLD / "python" / "data" / "data_clean",
     },
 )
-@pytask.mark.produces(BLD / "python" / "models" / "model.pickle")
+@pytask.mark.produces(BLD / "python" / "labelled" / "data_labelled")
 def task_fit_model_python(depends_on, produces):
     "Fit a logistic regression model (Python version)."
-    zero_shot_classifier(depends_on)
+    data = load_from_disk(depends_on)
+    data = data[:100]  # for testing
+    zero_shot_classifier(data)
     pass
 
 
