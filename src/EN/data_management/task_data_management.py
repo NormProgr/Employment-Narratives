@@ -45,8 +45,10 @@ def task_load_data_python(produces):
 # @pytask.mark.produces(BLD / "python" / "data" / "data_clean.csv")
 def task_clean_data_python(depends_on, produces):
     "Clean the data from unwanted categories and concetenate the raw files. Instead of using to_csv we should use to pickle."
-    df_1 = pd.read_csv(depends_on["Article_1"])
-    df_2 = pd.read_csv(depends_on["Article_2"])
+    df_1 = pd.read_csv(depends_on["Article_1"])  # need to delete cache here
+    df_2 = pd.read_csv(
+        depends_on["Article_2"],
+    )  # sometimes it works, sometimes it doesn't
     data_info = read_yaml(depends_on["data_info"])
     data = clean_data(df_1, df_2, data_info)
     data.save_to_disk(produces)

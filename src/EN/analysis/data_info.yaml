@@ -1,4 +1,5 @@
 ---
 labels: [labor supply, labor demand, government intervention]
 model_name: valhalla/distilbart-mnli-12-6
-classifiyable_data: [Article text, Description]
+classifiable_data: [Article text, Description]
+seed: 42
