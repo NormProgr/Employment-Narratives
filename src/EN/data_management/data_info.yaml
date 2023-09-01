@@ -2,7 +2,6 @@
 columns_to_drop:
   - Url
   - Headline
-  - Description
   - Second headline
   - Index
   - Author

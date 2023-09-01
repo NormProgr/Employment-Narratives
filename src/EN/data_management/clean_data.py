@@ -34,7 +34,6 @@ def clean_data(data_1, data_2, data_info):
     merged_dataset = pd.concat([data_1, data_2], axis=0)
     # put this into task
     merged_dataset = _drop_columns(merged_dataset, data_info)
-    merged_dataset = _pd_to_dataset(merged_dataset)
     return merged_dataset
 
 
