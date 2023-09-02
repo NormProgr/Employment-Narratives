@@ -79,10 +79,7 @@ for dataset in datasets:
             / "cnn-articles-after-basic-cleaning.zip"
             / "CNN_Articels_clean_2"
             / "CNN_Articels_clean.csv",
-            "Seed42_hand_classification": SRC
-            / "EN"
-            / "data"
-            / "seed_42_hand_classification.csv",
+            "Seed42_hand_classification": SRC / "data" / "seed_42_classification.csv",
         },
     )
     @pytask.mark.produces(BLD / "python" / "data" / f"data_{dataset}")
@@ -108,7 +105,9 @@ for dataset in datasets:
             data_info = read_yaml(depends_on["data_info"])
             data = clean_data(df_1, df_2, data_info)
             data = select_random_entries(data, num_entries=50, random_state=42)
-            pd.read_csv(
+            random_seed = pd.read_csv(
                 depends_on["Seed42_hand_classification"],
             )  # concetanete function and then done
+            hand_class = pd.read_csv(depends_on["Seed42_hand_classification"])
+            data = pd.concat([random_seed, hand_class], ignore_index=True)
             data.to_csv(produces)
