@@ -3,6 +3,7 @@
 import random
 
 import torch
+from datasets import Dataset
 from transformers import AutoTokenizer, pipeline
 
 seed = 42
@@ -27,7 +28,19 @@ def zero_shot_classifier(data):
         labels,
         tokenizer=_tokenize,
     )
+    zero_shot_data = _transform_to_disk(zero_shot_data)
     return zero_shot_data
+
+
+def _transform_to_disk(data):
+    """Transform the data to disk."""
+    data = {
+        "sequence": [item["sequence"] for item in data],
+        "labels": [item["labels"] for item in data],
+        "scores": [item["scores"] for item in data],
+    }
+    data = Dataset.from_dict(data)
+    return data
 
 
 def _zero_shot_labelling(data):
