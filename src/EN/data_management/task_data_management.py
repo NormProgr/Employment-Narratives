@@ -93,7 +93,7 @@ for dataset in datasets:
             df_1 = pd.read_csv(depends_on["Article_1"])  # need to delete cache here
             df_2 = pd.read_csv(
                 depends_on["Article_2"],
-            )  # sometimes it works, sometimes it doesn't
+            )
             data_info = read_yaml(depends_on["data_info"])
             data = clean_data(df_1, df_2, data_info)
             data.save_to_disk(produces)
