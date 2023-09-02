@@ -22,7 +22,7 @@ torch.cuda.manual_seed_all(seed)
         "data": BLD / "python" / "data" / "data_clean",
     },
 )
-@pytask.mark.produces(BLD / "python" / "labelled" / "data_labelled_subset")
+@pytask.mark.produces(BLD / "python" / "labelled" / "data_labelled_subset.json")
 def task_fit_model_python(depends_on, produces):
     "Fit a logistic regression model (Python version)."
     data = load_from_disk(depends_on["data"])
