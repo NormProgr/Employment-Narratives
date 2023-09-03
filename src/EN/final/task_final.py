@@ -3,7 +3,6 @@
 import pandas as pd
 import pytask
 
-from EN.analysis.model import load_model
 from EN.config import BLD, GROUPS, SRC
 from EN.final import plot_regression_by_age
 from EN.utilities import read_yaml

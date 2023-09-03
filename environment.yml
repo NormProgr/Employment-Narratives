@@ -37,6 +37,7 @@ dependencies:
   - tokenizers
   - datasets
   - sentencepiece
+  - tensorboardX  # Add tensorboardX as a dependency
   - pip:
       - torch
       - torchvision
@@ -44,3 +45,6 @@ dependencies:
       - huggingface_hub[cli]
       - -e .
       - kaleido
+      - transformers[torch]  # needed?
+      - accelerate -U  # needed?
+      - accelerate>=0.20.1  # needed?
