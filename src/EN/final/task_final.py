@@ -5,7 +5,21 @@ import pytask
 
 from EN.config import BLD, GROUPS, SRC
 from EN.final import plot_regression_by_age
+from EN.final.cache_deletion import delete_caches_in_directory
 from EN.utilities import read_yaml
+
+
+@pytask.mark.skip
+@pytask.mark.depends_on(
+    {
+        "folder": BLD / "python",
+    },
+)
+@pytask.mark.task()
+def task_cache_deletion(depends_on):
+    """Delete all caches after a run."""
+    delete_caches_in_directory(depends_on["folder"])
+
 
 for group in GROUPS:
     kwargs = {
