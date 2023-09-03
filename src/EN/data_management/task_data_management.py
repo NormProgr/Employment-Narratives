@@ -24,41 +24,6 @@ def task_load_data_python(produces):
         zip_ref.extractall(produces)
 
 
-@pytask.mark.depends_on(
-    {
-        "scripts": ["clean_data.py"],
-        "data_info": SRC / "data_management" / "data_info.yaml",
-        "Article_1": BLD
-        / "python"
-        / "data"
-        / "cnn-articles-after-basic-cleaning.zip"
-        / "CNN_Articels_clean"
-        / "CNN_Articels_clean.csv",
-        "Article_2": BLD
-        / "python"
-        / "data"
-        / "cnn-articles-after-basic-cleaning.zip"
-        / "CNN_Articels_clean_2"
-        / "CNN_Articels_clean.csv",
-    },
-)
-@pytask.mark.produces(BLD / "python" / "data" / "data_clean")
-# @pytask.mark.produces(BLD / "python" / "data" / "data_clean.csv")
-def task_clean_data_python(depends_on, produces):
-    "Clean the data from unwanted categories and concetenate the raw files. Instead of using to_csv we should use to pickle."
-    cache_folder = pathlib.Path(produces)
-    for file in cache_folder.iterdir():
-        if file.is_file() and file.name.endswith(".cache"):
-            file.unlink()
-    df_1 = pd.read_csv(depends_on["Article_1"])  # need to delete cache here
-    df_2 = pd.read_csv(
-        depends_on["Article_2"],
-    )  # sometimes it works, sometimes it doesn't
-    data_info = read_yaml(depends_on["data_info"])
-    data = clean_data(df_1, df_2, data_info)
-    data.save_to_disk(produces)
-
-
 datasets = ["clean", "benchmark.csv"]
 
 for dataset in datasets:
