@@ -2,6 +2,7 @@
 import pathlib
 import zipfile
 
+import datasets  # import save_to_disk
 import pandas as pd
 import pytask
 
@@ -12,11 +13,7 @@ from EN.utilities import read_yaml
 
 @pytask.mark.produces(BLD / "python" / "data" / "cnn-articles-after-basic-cleaning.zip")
 def task_load_data_python(produces):
-    """Clean the data (Python version).
-
-    Download needs up to 5 minutes. Is this due to internet or coding issue?
-
-    """
+    """Clean the data (Python version)."""
     api = authenticate_to_kaggle()
     dataset = "hadasu92/cnn-articles-after-basic-cleaning"
     api.dataset_download_files(dataset)
@@ -35,13 +32,11 @@ for dataset in datasets:
             "Article_1": BLD
             / "python"
             / "data"
-            / "cnn-articles-after-basic-cleaning.zip"
             / "CNN_Articels_clean"
             / "CNN_Articels_clean.csv",
             "Article_2": BLD
             / "python"
             / "data"
-            / "cnn-articles-after-basic-cleaning.zip"
             / "CNN_Articels_clean_2"
             / "CNN_Articels_clean.csv",
             "Seed42_hand_classification": SRC / "data" / "seed_42_classification.csv",

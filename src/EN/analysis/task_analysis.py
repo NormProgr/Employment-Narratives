@@ -26,7 +26,7 @@ torch.cuda.manual_seed_all(seed)
     },
 )
 @pytask.mark.produces(BLD / "python" / "labelled" / "data_labelled_subset")
-def task_fit_model_python(depends_on, produces):
+def task_zero_shot(depends_on, produces):
     "Zero-shot classification that produces the labels for the data."
     data = load_from_disk(
         depends_on["data"],
@@ -44,7 +44,7 @@ def task_fit_model_python(depends_on, produces):
     },
 )
 @pytask.mark.produces(BLD / "python" / "TrainTest" / "TrainTest_data")
-def task_fit_model_python(depends_on, produces):
+def task_TrainTest(depends_on, produces):
     "Zero-shot classification that produces the labels for the data."
     data = load_from_disk(
         depends_on["data"],
