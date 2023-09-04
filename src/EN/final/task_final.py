@@ -9,7 +9,7 @@ from EN.final.cache_deletion import delete_caches_in_directory
 from EN.utilities import read_yaml
 
 
-@pytask.mark.skip
+# @pytask.mark.skip
 @pytask.mark.depends_on(
     {
         "folder": BLD / "python",

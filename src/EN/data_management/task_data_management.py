@@ -10,9 +10,6 @@ from EN.data_management import authenticate_to_kaggle, clean_data, select_random
 from EN.utilities import read_yaml
 
 
-# for dataset in sets:
-
-
 @pytask.mark.depends_on(
     {
         "scripts": ["load_data.py"],
@@ -26,14 +23,14 @@ from EN.utilities import read_yaml
         / "python"
         / "data"
         / "CNN_Articels_clean"
-        / "CNN_Articels_clean.csv",  # / f"{dataset}"  / "CNN_Articels_clean.csv"
+        / "CNN_Articels_clean.csv",
         "file2": BLD
         / "python"
         / "data"
         / "CNN_Articels_clean_2"
         / "CNN_Articels_clean.csv",
     },
-)  # / "cnn-articles-after-basic-cleaning.zip"
+)
 def task_load_data(produces):
     """Clean the data (Python version)."""
     api = authenticate_to_kaggle()
@@ -41,24 +38,26 @@ def task_load_data(produces):
     api.dataset_download_files(dataset)
     with zipfile.ZipFile("cnn-articles-after-basic-cleaning.zip", "r") as zip_ref:
         zip_ref.extractall(produces["file"])
-    # kaggle.api.dataset_download_files(
-    #    dataset,
 
 
 @pytask.mark.depends_on(
     {
         "scripts": ["clean_data.py"],
         "data_info": SRC / "data_management" / "data_info.yaml",
-        "Article_1": BLD / "python" / "data"
-        # / "cnn-articles-after-basic-cleaning.zip"
-        / "CNN_Articels_clean" / "CNN_Articels_clean.csv",
-        "Article_2": BLD / "python" / "data"
-        # / "cnn-articles-after-basic-cleaning.zip"
-        / "CNN_Articels_clean_2" / "CNN_Articels_clean.csv",
+        "Article_1": BLD
+        / "python"
+        / "data"
+        / "CNN_Articels_clean"
+        / "CNN_Articels_clean.csv",
+        "Article_2": BLD
+        / "python"
+        / "data"
+        / "CNN_Articels_clean_2"
+        / "CNN_Articels_clean.csv",
         "Seed42_hand_classification": SRC / "data" / "seed_42_classification.csv",
     },
 )
-@pytask.mark.produces(BLD / "python" / "data" / "data_clean")  # {dataset}
+@pytask.mark.produces(BLD / "python" / "data" / "data_clean")
 def task_clean_data_python(depends_on, produces):
     "Clean the data from unwanted categories and concetenate the raw files. Also produces evaluation set."
     df_1 = pd.read_csv(depends_on["Article_1"])  # need to delete cache here
@@ -74,12 +73,16 @@ def task_clean_data_python(depends_on, produces):
     {
         "scripts": ["clean_data.py"],
         "data_info": SRC / "data_management" / "data_info.yaml",
-        "Article_1": BLD / "python" / "data"
-        # / "cnn-articles-after-basic-cleaning.zip"
-        / "CNN_Articels_clean" / "CNN_Articels_clean.csv",
-        "Article_2": BLD / "python" / "data"
-        # / "cnn-articles-after-basic-cleaning.zip"
-        / "CNN_Articels_clean_2" / "CNN_Articels_clean.csv",
+        "Article_1": BLD
+        / "python"
+        / "data"
+        / "CNN_Articels_clean"
+        / "CNN_Articels_clean.csv",
+        "Article_2": BLD
+        / "python"
+        / "data"
+        / "CNN_Articels_clean_2"
+        / "CNN_Articels_clean.csv",
         "Seed42_hand_classification": SRC / "data" / "seed_42_classification.csv",
     },
 )
