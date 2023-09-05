@@ -13,10 +13,10 @@ torch.cuda.manual_seed_all(seed)
 
 
 def zero_shot_classifier(data):
-    """Classify the zero-shot data to receive the labels."""
+    """Classify the zero-shot data to receive the classes."""
     data = _zero_shot_labelling(data)
     model_name = "valhalla/distilbart-mnli-12-6"
-    labels = ["labor supply", "labor demand", "government intervention"]
+    classes = ["labor supply", "labor demand", "government intervention"]
     classifier = pipeline(
         "zero-shot-classification",
         model=model_name,
@@ -25,10 +25,10 @@ def zero_shot_classifier(data):
     )
     zero_shot_data = classifier(
         data["Description"],
-        labels,
+        classes,
         tokenizer=_tokenize,
     )
-    zero_shot_data = _transform_to_disk(zero_shot_data)
+    zero_shot_data = _transform_to_disk(zero_shot_data)  # fix this
     return zero_shot_data
 
 
@@ -36,8 +36,8 @@ def _transform_to_disk(data):
     """Transform the data to disk."""
     data = {
         "sequence": [item["sequence"] for item in data],
-        "labels": [item["labels"] for item in data],
-        "scores": [item["scores"] for item in data],
+        "classes": [item["labels"] for item in data],  # come from this
+        "label": [item["scores"] for item in data],
     }
     data = Dataset.from_dict(data)
     return data

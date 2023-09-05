@@ -48,3 +48,4 @@ dependencies:
       - transformers[torch]  # needed?
       - accelerate -U  # needed?
       - accelerate>=0.20.1  # needed?
+      - xformers

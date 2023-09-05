@@ -31,11 +31,8 @@ def _split_dataset(df):
     val_dataset = val_dataset.rename_column("sequence", "text")
     test_dataset = test_dataset.rename_column("sequence", "text")
 
-    # You may need to specify the 'labels' column name if it's different
-    # Assuming it's 'labels' in your dataset, rename it to 'label'
-    train_dataset = train_dataset.rename_column("labels", "label")
-    val_dataset = val_dataset.rename_column("labels", "label")
-    test_dataset = test_dataset.rename_column("labels", "label")
+    # You may need to specify the 'classes' column name if it's different
+    # Assuming it's 'classes' in your dataset, rename it to 'classes'
 
     return {
         "train_dataset": train_dataset,
