@@ -26,11 +26,6 @@ def _split_dataset(df):
     val_dataset = datasets.Dataset.from_dict(df[train_size : train_size + val_size])
     test_dataset = datasets.Dataset.from_dict(df[train_size + val_size :])
 
-    # Rename columns if needed
-
-    # You may need to specify the 'classes' column name if it's different
-    # Assuming it's 'classes' in your dataset, rename it to 'classes'
-
     return {
         "train_dataset": train_dataset,
         "val_dataset": val_dataset,
