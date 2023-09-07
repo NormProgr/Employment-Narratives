@@ -1,43 +1,77 @@
 """Functions for predicting outcomes based on the estimated model."""
+seed = 42
+import random
 
-import numpy as np
-import pandas as pd
+import torch
+
+random.seed(seed)
+torch.manual_seed(seed)
+torch.cuda.manual_seed_all(seed)
+
+from torch import cuda
+from transformers import (
+    AutoTokenizer,
+    Trainer,
+    TrainingArguments,
+)
+
+device = "cuda" if cuda.is_available() else "cpu"
+model_ckpt = "distilbert-base-uncased"
 
 
-def predict_prob_by_age(data, model, group):
-    """Predict smoking probability for varying age values.
+import torch
+from transformers import (
+    AutoTokenizer,
+    Trainer,
+    TrainingArguments,
+)
 
-    For each group value in column data[group] we create new data that runs through a
-    grid of age values from data.age.min() to data.age.max() and fixes all column
-    values to the ones returned by data.mode(), except for the group column.
 
-    Args:
-        data (pandas.DataFrame): The data set.
-        model (statsmodels.base.model.Results): The fitted model.
-        group (str): Categorical column in data set. We create predictions for each
-            unique value in column data[group]. Cannot be 'age' or 'smoke'.
+def create_and_train_model(
+    train_dataset,
+    eval_dataset,
+    model,
+    batch_size=8,
+    num_train_epochs=1,
+):
+    tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
+    args = TrainingArguments(
+        output_dir="jigsaw",
+        evaluation_strategy="epoch",
+        learning_rate=2e-5,
+        per_device_train_batch_size=batch_size,
+        per_device_eval_batch_size=batch_size,
+        num_train_epochs=num_train_epochs,
+        weight_decay=0.01,
+    )
 
-    Returns:
-        pandas.DataFrame: Predictions. Has columns 'age' and one column for each
-            category in column group.
+    trainer = Trainer(
+        model,
+        args,
+        train_dataset=train_dataset,
+        eval_dataset=eval_dataset,
+        compute_metrics=_compute_metrics,
+        tokenizer=tokenizer,
+    )
 
-    """
-    age_min = data["age"].min()
-    age_max = data["age"].max()
-    age_grid = np.arange(age_min, age_max + 1)
+    trainer.train()
 
-    mode = data.mode()
+    return trainer
 
-    new_data = pd.DataFrame(age_grid, columns=["age"])
 
-    cols_to_set = list(set(data.columns) - {group, "age", "smoke"})
-    new_data = new_data.assign(**dict(mode.loc[0, cols_to_set]))
+# Create the trainer and train the model
 
-    predicted = {"age": age_grid}
-    for group_value in data[group].unique():
-        _new_data = new_data.copy()
-        _new_data[group] = group_value
-        predicted[group_value] = model.predict(_new_data)
+# You can now use the 'trainer' object for further operations or analysis outside of the function.
 
-    predicted = pd.DataFrame(predicted)
-    return predicted
+
+def _accuracy_thresh(y_pred, y_true, thresh=0.5, sigmoid=True):
+    y_pred = torch.from_numpy(y_pred)
+    y_true = torch.from_numpy(y_true)
+    if sigmoid:
+        y_pred = y_pred.sigmoid()
+    return ((y_pred > thresh) == y_true.bool()).float().mean().item()
+
+
+def _compute_metrics(eval_pred):
+    predictions, labels = eval_pred
+    return {"accuracy_thresh": _accuracy_thresh(predictions, labels)}

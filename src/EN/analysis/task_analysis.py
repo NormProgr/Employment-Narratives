@@ -8,6 +8,7 @@ from datasets import load_from_disk
 from torch import cuda
 
 from EN.analysis.model import bert_model
+from EN.analysis.predict import create_and_train_model
 from EN.analysis.train_test import create_train_test
 from EN.analysis.zero_shot import zero_shot_classifier
 from EN.config import BLD
@@ -68,7 +69,7 @@ def task_TrainTest(depends_on, produces):
 
 @pytask.mark.depends_on(
     {
-        "scripts": ["train_test.py"],
+        "scripts": ["model.py"],  # war vorher Train_test und hat geklappt
         "data": BLD / "python" / "TrainTest" / "TrainTest_data",
     },
 )
@@ -78,3 +79,31 @@ def task_model(depends_on, produces):
     model = bert_model(ds)
     with open(produces, "wb") as f:
         pickle.dump(model, f)
+
+
+@pytask.mark.depends_on(
+    {
+        "scripts": ["model.py"],  # war vorher Train_test und hat geklappt
+        "data": BLD / "python" / "model" / "data_model.pkl",
+    },
+)
+@pytask.mark.produces(BLD / "python" / "predict" / "predict_to_save.pkl")
+def task_predict(depends_on, produces):
+    with open(depends_on["data"], "rb") as f:
+        loaded_data_model = pickle.load(f)
+    dataset = loaded_data_model[0]
+    model = loaded_data_model[1]
+    trainer = create_and_train_model(
+        dataset["train_dataset"],
+        dataset["val_dataset"],
+        model,
+    )
+    trained = trainer.train()
+    evaluated = trainer.evaluate()
+    models_to_save = {
+        "trained": trained,
+        "eval": evaluated,
+    }
+    with open(produces, "wb") as f:
+        pickle.dump(models_to_save, f)
+    # need to fix jigsaw and output directory
