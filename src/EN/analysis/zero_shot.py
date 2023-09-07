@@ -28,14 +28,16 @@ def zero_shot_classifier(data):
         classes,
         tokenizer=_tokenize,
     )
-    zero_shot_data = _transform_to_disk(zero_shot_data)  # fix this
+    zero_shot_data = _transform_to_disk(zero_shot_data)
     return zero_shot_data
 
 
 def _transform_to_disk(data):
     """Transform the data to disk."""
     data = {
-        "sequence": [item["sequence"] for item in data],
+        "sequence": [
+            item["sequence"] for item in data
+        ],  # naming is crap or just sequence
         "classes": [item["labels"] for item in data],  # come from this
         "label": [item["scores"] for item in data],
     }

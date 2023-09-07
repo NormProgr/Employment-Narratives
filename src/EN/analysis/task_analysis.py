@@ -5,15 +5,27 @@ import random
 import pytask
 import torch
 from datasets import load_from_disk
+from torch import cuda
 
+from EN.analysis.model import bert_model
 from EN.analysis.train_test import create_train_test
 from EN.analysis.zero_shot import zero_shot_classifier
 from EN.config import BLD
+
+device = "cuda" if cuda.is_available() else "cpu"
+
+model_ckpt = "distilbert-base-uncased"
+
+
+import torch
 
 seed = 42
 random.seed(seed)
 torch.manual_seed(seed)
 torch.cuda.manual_seed_all(seed)
+
+import pickle
+
 
 # if GPU then then switch from data_labelled_subset to classified_data
 # make sure classified_data is the right format
@@ -52,3 +64,17 @@ def task_TrainTest(depends_on, produces):
     data = create_train_test(data)
     data.save_to_disk(produces)
     # fix this then model is easy, just need to add attention and input afterwards
+
+
+@pytask.mark.depends_on(
+    {
+        "scripts": ["train_test.py"],
+        "data": BLD / "python" / "TrainTest" / "TrainTest_data",
+    },
+)
+@pytask.mark.produces(BLD / "python" / "model" / "data_model.pkl")
+def task_model(depends_on, produces):
+    ds = load_from_disk(depends_on["data"])
+    model = bert_model(ds)
+    with open(produces, "wb") as f:
+        pickle.dump(model, f)
