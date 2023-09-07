@@ -27,6 +27,11 @@ def select_random_entries(dataframe, num_entries=50, random_state=42):
         )
 
     # Use Pandas' sample method to select random entries
-    random_entries = dataframe.sample(n=num_entries)
+    random_indices = np.random.choice(
+        dataframe["Index"],
+        size=num_entries,
+        replace=False,
+    )
+    random_entries = dataframe[dataframe["Index"].isin(random_indices)]
 
     return random_entries
