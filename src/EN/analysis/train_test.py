@@ -2,19 +2,34 @@ import datasets
 
 
 def create_train_test(df):
-    """Create a train, validation, and test dataset."""
-    # Split the dataset using the split_dataset function
+    """Create a train, validation, and test dataset.
+
+    Args:
+        df (pandas.DataFrame): The dataframe to be split.
+
+    Returns:
+        combined_dataset (datasets.DatasetDict): The split dataset.
+
+    """  # need to delete the validation data
     split_data = _split_dataset(df)
 
-    # Create a DatasetDict containing train, validation, and test datasets
     combined_dataset = datasets.DatasetDict(split_data)
     combined_dataset = _zero_one_translation(combined_dataset)
     return combined_dataset
 
 
 def _split_dataset(df):
-    """Split the dataset into train, validation, and test datasets."""
-    # Shuffle the dataset to ensure randomization
+    """Split and shuffle the dataset into train, validation, and test datasets.
+
+    Args:
+        df (pandas.DataFrame): The dataframe to be split in a train, validation, and test dataset.
+
+    Returns:
+        train_dataset (datasets.Dataset): The training dataset.
+        val_dataset (datasets.Dataset): The validation dataset.
+        test_dataset (datasets.Dataset): The test dataset.
+
+    """  # delete the validation data
     df = df.shuffle(seed=42)
 
     # Calculate the split sizes
@@ -36,7 +51,15 @@ def _split_dataset(df):
 
 
 def _zero_one_translation(dataset):
-    """Translate the labels to 0 and 1."""
+    """Translate the labels to 0 and 1.
+
+    Args:
+        dataset (datasets.DatasetDict): The dataset to be translated from continuous to binary.
+
+    Returns:
+        dataset (datasets.DatasetDict): The translated dataset.
+
+    """
     return dataset.map(
         lambda example: {"label": [1 if x > 0.5 else 0 for x in example["label"]]},
     )

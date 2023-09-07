@@ -26,7 +26,7 @@ def clean_data(data_1, data_2, data_info):
             - 'Article text': Full article text
 
     Returns:
-        pandas.DataFrame: The cleaned data set.
+        merged_dataset (pandas.DataFrame): The cleaned data set.
 
     """
     if not set(data_1.columns) == set(data_2.columns):
@@ -43,10 +43,10 @@ def _drop_columns(data, data_info):
 
     Args:
         data (pandas.DataFrame): The data set.
-        columns_to_drop (list): List of columns to drop.
+        data_info (yaml): List of columns to drop.
 
     Returns:
-        pandas.DataFrame: The data set without the dropped columns.
+        filtered_df (pandas.DataFrame): The data set without the dropped columns.
 
     """
     data = data.drop(columns=data_info["columns_to_drop"])
@@ -58,6 +58,12 @@ def _drop_columns(data, data_info):
 
 
 def _pd_to_dataset(data):
+    """Convert pandas DataFrame to HuggingFace Dataset.
+
+    Returns:
+        torch_data (dataset): HuggingFace Dataset ready for text classification.
+
+    """
     data = Dataset.from_pandas(data)
     dataset_dict = DatasetDict({"my_dataset": data})
     torch_data = dataset_dict["my_dataset"]

@@ -58,7 +58,7 @@ def task_zero_shot(depends_on, produces):
 )
 @pytask.mark.produces(BLD / "python" / "TrainTest" / "TrainTest_data")
 def task_TrainTest(depends_on, produces):
-    "Zero-shot classification that produces the labels for the data."
+    "Separate the data into test and training data."
     data = load_from_disk(
         depends_on["data"],
     )

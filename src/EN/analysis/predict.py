@@ -34,6 +34,19 @@ def create_and_train_model(
     batch_size=8,
     num_train_epochs=1,
 ):
+    """Train the model and define its arguments.
+
+    Args:
+        train_dataset (Dataset): Training dataset containing input features and labels.
+        eval_dataset (Dataset): Evaluation dataset containing input features and labels.
+        model (PreTrainedModel): The pre-trained model to fine-tuning.
+        batch_size (int): Batch size for training and evaluation.
+        num_train_epochs (int): Number of training epochs.
+
+    Returns:
+        Trainer: A trainer object configured for training the model.
+
+    """
     tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
     args = TrainingArguments(
         output_dir="jigsaw",
@@ -59,19 +72,35 @@ def create_and_train_model(
     return trainer
 
 
-# Create the trainer and train the model
-
-# You can now use the 'trainer' object for further operations or analysis outside of the function.
-
-
 def _accuracy_thresh(y_pred, y_true, thresh=0.5, sigmoid=True):
+    """Compute the accuracy score using a threshold for binary classification.
+
+    Args:
+        y_pred (tensor): Predicted values.
+        y_true(tensor): True labels.
+        thresh (float): Threshold for class prediction.
+        sigmoid (bool): Apply sigmoid activation to y_pred.
+
+    Returns:
+        float: The accuracy score.
+
+    """
     y_pred = torch.from_numpy(y_pred)
     y_true = torch.from_numpy(y_true)
     if sigmoid:
-        y_pred = y_pred.sigmoid()
+        y_pred = y_pred.sigmoid()  # what does this mean?
     return ((y_pred > thresh) == y_true.bool()).float().mean().item()
 
 
 def _compute_metrics(eval_pred):
+    """Compute the accuracy score based on evaluation predictions.
+
+    Args:
+        eval_pred (list): Evaluation predictions.
+
+    Returns:
+        dict: A dictionary containing the accuracy score.
+
+    """
     predictions, labels = eval_pred
     return {"accuracy_thresh": _accuracy_thresh(predictions, labels)}

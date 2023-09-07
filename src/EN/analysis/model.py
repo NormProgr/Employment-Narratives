@@ -26,6 +26,16 @@ from transformers import AutoTokenizer
 
 
 def bert_model(ds):
+    """Produce the encoded data and the model.
+
+    Arguments:
+        ds (dataset): The dataset to be encoded.
+
+    Returns:
+        ds_encoded (dataset): Encoded huggingface dataset.
+        model (model): The model to be trained.
+
+    """
     # Initialize the tokenizer
     tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
 
@@ -42,6 +52,17 @@ def bert_model(ds):
 
 # Function to tokenize the dataset
 def _tokenize_dataset(ds, tokenizer):
+    """Tokenize the dataset.
+
+    Arguments:
+        ds (dataset): The dataset to be encoded.
+        tokenizer (tokenizer): The tokenizer to be used.
+
+    Returns:
+        ds_encoded (dataset): Encoded huggingface dataset.
+
+    """
+
     def tokenize(batch):
         return tokenizer(batch["sequence"], padding=True, truncation=True)
 
@@ -52,6 +73,18 @@ def _tokenize_dataset(ds, tokenizer):
 
 
 class BertForMultilabelSequenceClassification(BertForSequenceClassification):
+    """BertForMultilabelSequenceClassification is a custom extension of the BERT model
+    for multilabel sequence classification tasks.
+
+    Args:
+        config (BertConfig): The model configuration class specifying the model's
+            architecture and hyperparameters.
+
+    Attributes:
+        config (BertConfig): The model configuration class.
+
+    """
+
     def __init__(self, config):
         super().__init__(config)
 
@@ -68,6 +101,31 @@ class BertForMultilabelSequenceClassification(BertForSequenceClassification):
         output_hidden_states=None,
         return_dict=None,
     ):
+        """Forward pass of the BertForMultilabelSequenceClassification model.
+
+        Args:
+            input_ids (Tensor, optional): Input token IDs.
+            attention_mask (Tensor, optional): Mask indicating which tokens should
+                be attended to.
+            token_type_ids (Tensor, optional): Token type IDs.
+            position_ids (Tensor, optional): Positional embeddings.
+            head_mask (Tensor, optional): Mask to control which heads are used in
+                the attention layers.
+            inputs_embeds (Tensor, optional): Custom embeddings for input tokens.
+
+            labels (Tensor, optional): Ground truth labels for the classification
+                task.
+            output_attentions (bool, optional): Whether to output attention weights.
+
+            output_hidden_states (bool, optional): Whether to output hidden states.
+
+            return_dict (bool, optional): Whether to return outputs as a dictionary.
+
+
+        Returns:
+            SequenceClassifierOutput: Returns a dictionary containing model outputs, including logits and optional additional outputs.
+
+        """
         return_dict = (
             return_dict if return_dict is not None else self.config.use_return_dict
         )
@@ -90,7 +148,7 @@ class BertForMultilabelSequenceClassification(BertForSequenceClassification):
 
         loss = None
         if labels is not None:
-            loss_fct = torch.nn.BCEWithLogitsLoss()
+            loss_fct = torch.nn.BCEWithLogitsLoss()  # probably warning source
             loss = loss_fct(
                 logits.view(-1, self.num_labels),
                 labels.float().view(-1, self.num_labels),

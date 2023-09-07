@@ -32,7 +32,7 @@ from EN.utilities import read_yaml
     },
 )
 def task_load_data(produces):
-    """Clean the data (Python version)."""
+    """Load the data from kaggle."""
     api = authenticate_to_kaggle()
     dataset = "hadasu92/cnn-articles-after-basic-cleaning"
     api.dataset_download_files(dataset)
@@ -59,7 +59,7 @@ def task_load_data(produces):
 )
 @pytask.mark.produces(BLD / "python" / "data" / "data_clean")
 def task_clean_data_python(depends_on, produces):
-    "Clean the data from unwanted categories and concetenate the raw files. Also produces evaluation set."
+    "Clean the data concetenate the raw files. Also produces evaluation dataset."
     df_1 = pd.read_csv(depends_on["Article_1"])  # need to delete cache here
     df_2 = pd.read_csv(
         depends_on["Article_2"],
@@ -86,19 +86,19 @@ def task_clean_data_python(depends_on, produces):
         "Seed42_hand_classification": SRC / "data" / "seed_42_classification.csv",
     },
 )
-@pytask.mark.produces(BLD / "python" / "data" / "benchmark.csv")  # {dataset}
+@pytask.mark.produces(BLD / "python" / "data" / "benchmark.csv")
 def task_select_data(depends_on, produces):
     "Subset the data to 50 entries and add the hand classification."
     df_1 = pd.read_csv(depends_on["Article_1"])  # need to delete cache here
     df_2 = pd.read_csv(
         depends_on["Article_2"],
-    )  # sometimes it works, sometimes it doesn't
+    )
     data_info = read_yaml(depends_on["data_info"])
     data = clean_data(df_1, df_2, data_info)
     data = select_random_entries(data, num_entries=50, random_state=42)
     random_seed = pd.read_csv(
         depends_on["Seed42_hand_classification"],
-    )  # concetanete function and then done
+    )
     hand_class = pd.read_csv(depends_on["Seed42_hand_classification"])
     data = pd.concat([random_seed, hand_class], ignore_index=True)
     data.to_csv(produces)
