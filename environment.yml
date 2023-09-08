@@ -49,3 +49,4 @@ dependencies:
       - accelerate -U  # needed?
       - accelerate>=0.20.1  # needed?
       - xformers
+      - colabcode

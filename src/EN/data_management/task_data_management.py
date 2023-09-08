@@ -4,6 +4,7 @@ import zipfile
 
 import pandas as pd
 import pytask
+from datasets import load_from_disk
 
 from EN.config import BLD, SRC
 from EN.data_management import authenticate_to_kaggle, clean_data, select_random_entries
@@ -71,29 +72,16 @@ def task_clean_data_python(depends_on, produces):
 
 @pytask.mark.depends_on(
     {
-        "scripts": ["clean_data.py"],
-        "data_info": SRC / "data_management" / "data_info.yaml",
-        "Article_1": BLD
-        / "python"
-        / "data"
-        / "CNN_Articels_clean"
-        / "CNN_Articels_clean.csv",
-        "Article_2": BLD
-        / "python"
-        / "data"
-        / "CNN_Articels_clean_2"
-        / "CNN_Articels_clean.csv",
+        "scripts": ["subset_selection.py"],
+        "data": BLD / "python" / "data" / "data_clean",
         "Seed42_hand_classification": SRC / "data" / "seed_42_classification.csv",
     },
 )
 @pytask.mark.produces(BLD / "python" / "data" / "benchmark.csv")
 def task_select_data(depends_on, produces):
     "Subset the data to 50 entries and add the hand classification."
-    df_1 = pd.read_csv(depends_on["Article_1"])  # need to delete cache here
-    df_2 = pd.read_csv(
-        depends_on["Article_2"],
-    )
-    data_info = read_yaml(depends_on["data_info"])
-    data = clean_data(df_1, df_2, data_info)
+    data = load_from_disk(depends_on["data"])
     data = select_random_entries(data, num_entries=50, random_state=42)
+    hand_class = pd.read_csv(depends_on["Seed42_hand_classification"])
+    data = pd.concat([data, hand_class], ignore_index=True)
     data.to_csv(produces)
