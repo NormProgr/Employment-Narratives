@@ -2,6 +2,7 @@
 
 import random
 
+import pandas as pd
 import pytask
 import torch
 from datasets import load_from_disk
@@ -11,6 +12,7 @@ from EN.analysis.model import bert_model
 from EN.analysis.predict import create_and_train_model
 from EN.analysis.train_test import create_train_test
 from EN.analysis.zero_shot import zero_shot_classifier
+from EN.analysis.zero_shot_eval import benchmark_zero_shot_classifier
 from EN.config import BLD
 
 device = "cuda" if cuda.is_available() else "cpu"
@@ -44,10 +46,39 @@ def task_zero_shot(depends_on, produces):
     data = load_from_disk(
         depends_on["data"],
     )  # keep an eye of cache data being produced
-    first_100_entries = data.select(range(100))
-    first_100_entries = zero_shot_classifier(first_100_entries)
-    first_100_entries.save_to_disk(produces)
-    # fix this then model is easy, just need to add attention and input afterwards
+
+    if device == "cuda":
+        # Handle GPU-specific operations
+        labeled_data = zero_shot_classifier(data)
+    else:
+        # Handle CPU operations, selecting only 100 data points
+        first_100_entries = data.select(range(100))
+        labeled_data = zero_shot_classifier(first_100_entries)
+    labeled_data.save_to_disk(produces)
+
+
+#############
+@pytask.mark.depends_on(
+    {
+        "scripts": ["zero_shot.py"],
+        "data": BLD / "python" / "data" / "benchmark.csv",
+    },
+)
+@pytask.mark.produces(BLD / "python" / "labelled" / "benchmark_labelled")
+def task_zero_shot_eval(depends_on, produces):
+    "Zero-shot classification that produces the labels for the data."
+    data = pd.read_csv(depends_on["data"])
+    data = benchmark_zero_shot_classifier(data)
+    if device == "cuda":
+        # Handle GPU-specific operations
+        labeled_data = zero_shot_classifier(data)
+    else:
+        # Handle CPU operations, selecting only 100 data points
+        labeled_data = zero_shot_classifier(data)
+    labeled_data.save_to_disk(produces)
+
+
+##########
 
 
 @pytask.mark.depends_on(

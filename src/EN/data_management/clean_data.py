@@ -54,6 +54,7 @@ def _drop_columns(data, data_info):
     filtered_df = data[
         ~data[data_info["column_name"]].isin(data_info["values_to_remove"])
     ]
+
     return filtered_df
 
 
