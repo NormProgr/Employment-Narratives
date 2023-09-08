@@ -96,9 +96,4 @@ def task_select_data(depends_on, produces):
     data_info = read_yaml(depends_on["data_info"])
     data = clean_data(df_1, df_2, data_info)
     data = select_random_entries(data, num_entries=50, random_state=42)
-    random_seed = pd.read_csv(
-        depends_on["Seed42_hand_classification"],
-    )
-    hand_class = pd.read_csv(depends_on["Seed42_hand_classification"])
-    data = pd.concat([random_seed, hand_class], ignore_index=True)
     data.to_csv(produces)
