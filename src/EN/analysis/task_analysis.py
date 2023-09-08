@@ -52,12 +52,19 @@ def task_zero_shot(depends_on, produces):
         labeled_data = zero_shot_classifier(data)
     else:
         # Handle CPU operations, selecting only 100 data points
-        first_100_entries = data.select(range(100))
+        total_examples = len(
+            data,
+        )  # Replace "train" with the split you want to use (e.g., "test", "validation").
+        # Generate a list of 100 random indices
+        random_indices = random.sample(range(total_examples), 100)
+        # Extract the random subset of 100 examples from the dataset
+        first_100_entries = data.select(random_indices)
+
         labeled_data = zero_shot_classifier(first_100_entries)
     labeled_data.save_to_disk(produces)
 
 
-#############
+############# delete this and just do the evaluation here
 @pytask.mark.depends_on(
     {
         "scripts": ["zero_shot.py"],

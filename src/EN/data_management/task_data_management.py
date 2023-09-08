@@ -70,6 +70,7 @@ def task_clean_data_python(depends_on, produces):
     data.save_to_disk(produces)
 
 
+# delete this it is not needed
 @pytask.mark.depends_on(
     {
         "scripts": ["subset_selection.py"],
