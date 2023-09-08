@@ -39,21 +39,35 @@ def clean_data(data_1, data_2, data_info):
 
 
 def _drop_columns(data, data_info):
-    """Drop columns from data set.
+    """Drop columns from data set and filter rows based on Category and Section.
 
     Args:
         data (pandas.DataFrame): The data set.
-        data_info (yaml): List of columns to drop.
+        data_info (yaml): Dictionary containing information about columns to drop
+                          and values to remove.
 
     Returns:
-        filtered_df (pandas.DataFrame): The data set without the dropped columns.
+        filtered_df (pandas.DataFrame): The data set without the dropped columns
+                                      and filtered rows.
 
     """
-    data = data.drop(columns=data_info["columns_to_drop"])
+    # Remove rows with missing values
     data = data.dropna()
+
+    # Filter rows based on the "Category" column
     filtered_df = data[
         ~data[data_info["column_name"]].isin(data_info["values_to_remove"])
     ]
+
+    # Filter rows based on the "Section" column
+    if "Section" in data.columns:
+        filtered_df = filtered_df[
+            ~filtered_df["Section"].isin(data_info["values_to_remove"])
+        ]
+
+    # Drop specified columns
+    data = data.drop(columns=data_info["columns_to_drop"])
+
     return filtered_df
 
 

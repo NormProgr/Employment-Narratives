@@ -44,10 +44,14 @@ def task_zero_shot(depends_on, produces):
     data = load_from_disk(
         depends_on["data"],
     )  # keep an eye of cache data being produced
-    first_100_entries = data.select(range(100))
-    first_100_entries = zero_shot_classifier(first_100_entries)
-    first_100_entries.save_to_disk(produces)
-    # fix this then model is easy, just need to add attention and input afterwards
+
+    if device == "cuda":
+        # Handle GPU-specific operations
+        labeled_data = zero_shot_classifier(data)
+    else:
+        # Handle CPU operations, selecting only 100 data points
+        labeled_data = zero_shot_classifier(data.select(range(100)))
+    labeled_data.save_to_disk(produces)
 
 
 @pytask.mark.depends_on(
@@ -64,12 +68,11 @@ def task_TrainTest(depends_on, produces):
     )
     data = create_train_test(data)
     data.save_to_disk(produces)
-    # fix this then model is easy, just need to add attention and input afterwards
 
 
 @pytask.mark.depends_on(
     {
-        "scripts": ["model.py"],  # war vorher Train_test und hat geklappt
+        "scripts": ["model.py"],
         "data": BLD / "python" / "TrainTest" / "TrainTest_data",
     },
 )
@@ -83,7 +86,7 @@ def task_model(depends_on, produces):
 
 @pytask.mark.depends_on(
     {
-        "scripts": ["model.py"],  # war vorher Train_test und hat geklappt
+        "scripts": ["model.py"],
         "data": BLD / "python" / "model" / "data_model.pkl",
     },
 )

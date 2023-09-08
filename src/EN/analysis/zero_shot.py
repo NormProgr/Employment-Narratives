@@ -1,4 +1,4 @@
-"""Functions for fitting the regression model."""
+"""Functions for applying the zero-shot classification."""
 
 import random
 

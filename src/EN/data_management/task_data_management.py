@@ -84,4 +84,7 @@ def task_select_data(depends_on, produces):
     data = select_random_entries(data, num_entries=50, random_state=42)
     hand_class = pd.read_csv(depends_on["Seed42_hand_classification"])
     data = pd.concat([data, hand_class], ignore_index=True)
+    # here I transform the data to a dataset
+    # then it will be zero shot classified
+    # then I run a zer-shot evaluation
     data.to_csv(produces)
