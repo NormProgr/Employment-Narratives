@@ -12,13 +12,24 @@ from EN.utilities import read_yaml
 @pytask.mark.skip
 @pytask.mark.depends_on(
     {
-        "folder": BLD / "python",
+        "scripts": ["cache_deletion.py"],
+    },
+)
+@pytask.mark.task
+@pytask.mark.produces(
+    {
+        "caches": BLD / "python",
+        "caches1": BLD / "python" / "data_clean",
+        "caches2": BLD / "python" / "labelled",
+        "caches3": BLD / "python" / "TrainTest" / "TrainTest_dataset" / "test_dataset",
+        "caches4": BLD / "python" / "TrainTest" / "TrainTest_dataset" / "train_dataset",
+        "caches5": BLD / "python" / "TrainTest" / "TrainTest_dataset" / "val_dataset",
     },
 )
 @pytask.mark.task()
-def task_cache_deletion(depends_on):
+def task_cache_deletion(produces):
     """Delete all caches after a run."""
-    delete_caches_in_directory(depends_on["folder"])
+    delete_caches_in_directory(produces)
 
 
 for group in GROUPS:
