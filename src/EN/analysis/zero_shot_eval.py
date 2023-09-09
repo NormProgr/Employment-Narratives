@@ -1,5 +1,6 @@
 "Functions that evaluate the zero-shot performance of the model."
 
+import pandas as pd
 from sklearn.metrics import accuracy_score
 
 
@@ -12,9 +13,11 @@ def calculate_accuracy_scores(hand_class, data, threshold=0.5):
         threshold (float, optional): Threshold for binary classification (default is 0.5).
 
     Returns:
-        tuple: A tuple containing:
-            - accuracy_scores (list of float): Accuracy scores for each label.
-            - mean_accuracy (float): Mean accuracy score across all labels.
+        dict: A dictionary containing the following key-value pairs:
+            - 'Class Accuracy': list of float, Accuracy scores for each label.
+            - 'Mean Accuracy': float, Mean accuracy score across all labels.
+            - 'Class Name': list of str, Names of the columns for which accuracy scores were calculated.
+            - 'Count Ones': list of int, Count of '1's in each column.
 
     """
     hand_class = hand_class.rename(
@@ -27,16 +30,19 @@ def calculate_accuracy_scores(hand_class, data, threshold=0.5):
 
     merged_df = hand_class.merge(data, on="sequence", how="inner")
 
-    for label in ["government intervention", "labor demand", "labor supply"]:
-        merged_df[label] = merged_df.apply(
-            lambda row: 1 if any(val > threshold for val in row["label"]) else 0,
-            axis=1,
-        )
+    merged_df[
+        [
+            "government intervention",
+            "labor demand",
+            "labor supply",
+        ]
+    ] = pd.DataFrame(merged_df["label"].tolist(), index=merged_df.index)
 
-    # Drop the original 'label' column
     merged_df = merged_df.drop("label", axis=1)
 
-    # Replace NaN values with zeros in the predicted_labels DataFrame
+    merged_df[["government intervention", "labor supply", "labor demand"]] = merged_df[
+        ["government intervention", "labor supply", "labor demand"]
+    ].applymap(_zero_one_transform)
     predicted_labels = merged_df[
         ["government intervention true", "labor demand true", "labor supply true"]
     ].fillna(0)
@@ -49,5 +55,21 @@ def calculate_accuracy_scores(hand_class, data, threshold=0.5):
     ]
 
     mean_accuracy = sum(accuracy_scores) / len(accuracy_scores)
+    column_names = true_labels.columns.tolist()
+    ones_count = true_labels.sum().tolist()
 
-    return accuracy_scores, mean_accuracy
+    result_dict = {
+        "Class Accuracy": accuracy_scores,
+        "Mean Accuracy": mean_accuracy,
+        "Class Name": column_names,
+        "Count Ones": ones_count,
+    }
+
+    return result_dict
+
+
+def _zero_one_transform(x):
+    if x > 0.5:
+        return 1
+    else:
+        return 0

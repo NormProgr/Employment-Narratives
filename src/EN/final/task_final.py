@@ -4,8 +4,8 @@ import pandas as pd
 import pytask
 
 from EN.config import BLD, GROUPS, SRC
-from EN.final import plot_regression_by_age
 from EN.final.cache_deletion import delete_caches_in_directory
+from EN.final.plot import table_produce
 from EN.utilities import read_yaml
 
 
@@ -13,23 +13,56 @@ from EN.utilities import read_yaml
 @pytask.mark.depends_on(
     {
         "scripts": ["cache_deletion.py"],
+        "cache": BLD / "python",
     },
 )
 @pytask.mark.task
-@pytask.mark.produces(
+# @pytask.mark.produces(
+#    },
+@pytask.mark.task()
+def task_cache_deletion(depends_on):
+    """Delete all caches after a run."""
+    delete_caches_in_directory(depends_on["cache"])
+
+
+import pickle
+
+import pandas as pd
+
+# pip install luigi
+# pip install xhtml2pdf
+from tabulate import tabulate
+
+
+@pytask.mark.depends_on(
     {
-        "caches": BLD / "python",
-        "caches1": BLD / "python" / "data_clean",
-        "caches2": BLD / "python" / "labelled",
-        "caches3": BLD / "python" / "TrainTest" / "TrainTest_dataset" / "test_dataset",
-        "caches4": BLD / "python" / "TrainTest" / "TrainTest_dataset" / "train_dataset",
-        "caches5": BLD / "python" / "TrainTest" / "TrainTest_dataset" / "val_dataset",
+        "scripts": ["cache_deletion.py"],
+        "input1": BLD / "python" / "results" / "predict_to_save.pkl",
+        "input2": BLD / "python" / "results" / "acc_scores_zer_shot.pkl",
     },
 )
-@pytask.mark.task()
-def task_cache_deletion(produces):
-    """Delete all caches after a run."""
-    delete_caches_in_directory(produces)
+@pytask.mark.produces(
+    {
+        "training_results": BLD / "python" / "results" / "results.md",
+        "zero_shot_results": BLD / "python" / "results" / "results2.md",
+    },
+)
+def task_table_produce(depends_on, produces):
+    """Produce the readme results to discuss."""
+    with open(depends_on["input1"], "rb") as file:
+        result1 = pickle.load(file)
+    with open(depends_on["input1"], "rb") as file:
+        result2 = pickle.load(file)
+    result1, result2 = table_produce(result1, result2)
+
+    markdown_table = tabulate(result1, headers="keys", tablefmt="pipe")
+    markdown_table2 = tabulate(result2, headers="keys", tablefmt="pipe")
+
+    # Save the Markdown table to a file
+    with open(produces["training_results"], "w") as md_file:
+        md_file.write(markdown_table)
+    with open(produces["zero_shot_results"], "w") as md_file:
+        md_file.write(markdown_table2)
 
 
 for group in GROUPS:
