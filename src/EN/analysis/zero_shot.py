@@ -32,7 +32,7 @@ def zero_shot_classifier(data):
         device="cuda:0" if torch.cuda.is_available() else None,
     )
     zero_shot_data = classifier(
-        data["Description"],
+        data["Description"],  # with good gpu  use Article text
         classes,
         tokenizer=_tokenize,
     )
@@ -91,7 +91,7 @@ def _tokenize(batch, tokenizer):
 
     """
     return tokenizer(
-        batch["Description"],
+        batch["Description"],  # with good gpu  use Article text
         padding=True,
         truncation=True,
         return_tensors="pt",

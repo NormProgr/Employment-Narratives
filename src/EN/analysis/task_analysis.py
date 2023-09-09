@@ -12,8 +12,7 @@ from EN.analysis.model import bert_model
 from EN.analysis.predict import create_and_train_model
 from EN.analysis.train_test import create_train_test
 from EN.analysis.zero_shot import zero_shot_classifier
-from EN.analysis.zero_shot_eval import benchmark_zero_shot_classifier
-from EN.config import BLD
+from EN.config import BLD, SRC
 
 device = "cuda" if cuda.is_available() else "cpu"
 
@@ -40,13 +39,12 @@ import pickle
         "data": BLD / "python" / "data" / "data_clean",
     },
 )
-@pytask.mark.produces(BLD / "python" / "labelled" / "data_labelled_subset")
+@pytask.mark.produces(BLD / "python" / "labelled" / "data_labelled")
 def task_zero_shot(depends_on, produces):
     "Zero-shot classification that produces the labels for the data."
     data = load_from_disk(
         depends_on["data"],
     )  # keep an eye of cache data being produced
-
     if device == "cuda":
         # Handle GPU-specific operations
         labeled_data = zero_shot_classifier(data)
@@ -55,37 +53,27 @@ def task_zero_shot(depends_on, produces):
         total_examples = len(
             data,
         )  # Replace "train" with the split you want to use (e.g., "test", "validation").
-        # Generate a list of 100 random indices
         random_indices = random.sample(range(total_examples), 100)
-        # Extract the random subset of 100 examples from the dataset
         first_100_entries = data.select(random_indices)
-
         labeled_data = zero_shot_classifier(first_100_entries)
     labeled_data.save_to_disk(produces)
 
 
-############# delete this and just do the evaluation here
 @pytask.mark.depends_on(
     {
         "scripts": ["zero_shot.py"],
-        "data": BLD / "python" / "data" / "benchmark.csv",
+        "data": BLD / "python" / "labelled" / "data_labelled",
+        "hand_class": SRC / "data" / "seed_42_classification.csv",
     },
 )
 @pytask.mark.produces(BLD / "python" / "labelled" / "benchmark_labelled")
 def task_zero_shot_eval(depends_on, produces):
     "Zero-shot classification that produces the labels for the data."
-    data = pd.read_csv(depends_on["data"])
-    data = benchmark_zero_shot_classifier(data)
-    if device == "cuda":
-        # Handle GPU-specific operations
-        labeled_data = zero_shot_classifier(data)
-    else:
-        # Handle CPU operations, selecting only 100 data points
-        labeled_data = zero_shot_classifier(data)
-    labeled_data.save_to_disk(produces)
-
-
-##########
+    data = load_from_disk(depends_on["data"])
+    data = pd.DataFrame(data)
+    hand_class = pd.read_csv(depends_on["hand_class"])
+    data = pd.concat([data, hand_class])  # , ignore_index=True
+    data.to_csv(produces)
 
 
 @pytask.mark.depends_on(
