@@ -12,6 +12,7 @@ from EN.analysis.model import bert_model
 from EN.analysis.predict import create_and_train_model
 from EN.analysis.train_test import create_train_test
 from EN.analysis.zero_shot import zero_shot_classifier
+from EN.analysis.zero_shot_eval import calculate_accuracy_scores
 from EN.config import BLD, SRC
 
 device = "cuda" if cuda.is_available() else "cpu"
@@ -66,14 +67,15 @@ def task_zero_shot(depends_on, produces):
         "hand_class": SRC / "data" / "seed_42_classification.csv",
     },
 )
-@pytask.mark.produces(BLD / "python" / "labelled" / "benchmark_labelled")
+@pytask.mark.produces(BLD / "python" / "results" / "acc_scores_zer_shot.pkl")
 def task_zero_shot_eval(depends_on, produces):
     "Zero-shot classification that produces the labels for the data."
     data = load_from_disk(depends_on["data"])
     data = pd.DataFrame(data)
     hand_class = pd.read_csv(depends_on["hand_class"])
-    data = pd.concat([data, hand_class])  # , ignore_index=True
-    data.to_csv(produces)
+    acc_scores_zer_shot = calculate_accuracy_scores(hand_class, data)
+    with open(produces, "wb") as f:
+        pickle.dump(acc_scores_zer_shot, f)
 
 
 @pytask.mark.depends_on(
@@ -113,7 +115,7 @@ def task_model(depends_on, produces):
         "data": BLD / "python" / "model" / "data_model.pkl",
     },
 )
-@pytask.mark.produces(BLD / "python" / "predict" / "predict_to_save.pkl")
+@pytask.mark.produces(BLD / "python" / "results" / "predict_to_save.pkl")
 def task_predict(depends_on, produces):
     with open(depends_on["data"], "rb") as f:
         loaded_data_model = pickle.load(f)
