@@ -46,6 +46,25 @@ To build the project, type
 $ pytask
 ```
 
+## Configuration
+
+The code makes an automated check whether or not you use a CPU or GPU. With a CPU
+automatically a smaller dataset of 100 will be executed. Further configurations are
+stored in `src/EN/analysis/model_config.yaml`. You can freely change the initial
+configurations by:
+
+```console
+classifiable_data: Description # can be changed to "Article text" or keep "Description"
+model_name: valhalla/distilbart-mnli-12-6
+batch_size: 20
+epochs: 3
+weight_decay: 0.01
+model_name_pred: distilbert-base-uncased
+```
+
+Additionally it is possible to change the `seed = 42` which is not recommended if you
+did not classify a subset of data by hand by yourself for the zero-shot evaluation.
+
 ## Questions & Answers
 
 1. List five different tasks that belong to the field of natural language processing.
