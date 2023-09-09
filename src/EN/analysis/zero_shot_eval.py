@@ -4,13 +4,12 @@ import pandas as pd
 from sklearn.metrics import accuracy_score
 
 
-def calculate_accuracy_scores(hand_class, data, threshold=0.5):
+def calculate_accuracy_scores(hand_class, data):
     """Calculate accuracy scores for binary classification labels in merged DataFrames.
 
     Args:
         hand_class (pd.DataFrame): DataFrame containing manually labeled data.
         data (pd.DataFrame): DataFrame containing predicted labels and sequences.
-        threshold (float, optional): Threshold for binary classification (default is 0.5).
 
     Returns:
         dict: A dictionary containing the following key-value pairs:
@@ -69,6 +68,15 @@ def calculate_accuracy_scores(hand_class, data, threshold=0.5):
 
 
 def _zero_one_transform(x):
+    """Transform a float to a binary value.
+
+    Args:
+        x (float): A float value.
+
+    Returns:
+        int: 1 if x > 0.5, else 0.
+
+    """
     if x > 0.5:
         return 1
     else:

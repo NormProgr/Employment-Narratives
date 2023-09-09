@@ -12,7 +12,7 @@ torch.manual_seed(seed)
 torch.cuda.manual_seed_all(seed)
 
 
-def zero_shot_classifier(data):
+def zero_shot_classifier(data, model_config):
     """Classify the zero-shot data to receive the classes.
 
     Args:
@@ -22,8 +22,8 @@ def zero_shot_classifier(data):
         zero_shot_data (datasets.Dataset): The classified dataset.
 
     """
-    data = _zero_shot_labelling(data)
-    model_name = "valhalla/distilbart-mnli-12-6"
+    data = _zero_shot_labelling(data, model_config)
+    model_name = model_config["model_name"]
     classes = ["labor supply", "labor demand", "government intervention"]
     classifier = pipeline(
         "zero-shot-classification",
@@ -32,7 +32,7 @@ def zero_shot_classifier(data):
         device="cuda:0" if torch.cuda.is_available() else None,
     )
     zero_shot_data = classifier(
-        data["Description"],  # with good gpu  use Article text
+        data[model_config["classifiable_data"]],  # with good gpu  use Article text
         classes,
         tokenizer=_tokenize,
     )
@@ -59,7 +59,7 @@ def _transform_to_disk(data):
     return data
 
 
-def _zero_shot_labelling(data):
+def _zero_shot_labelling(data, model_config):
     """Load the model for zero-shot classification and apply on the data.
 
     Arguments:
@@ -69,17 +69,16 @@ def _zero_shot_labelling(data):
         data (dataset): The tokenized data.
 
     """
-    model_name = "valhalla/distilbart-mnli-12-6"
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    tokenizer = AutoTokenizer.from_pretrained(model_config["model_name"])
     df_encoded = data.map(
-        lambda batch: _tokenize(batch, tokenizer),
+        lambda batch: _tokenize(batch, tokenizer, model_config),
         batched=True,
-        batch_size=8,
+        batch_size=model_config["batch_size"],
     )
     return df_encoded
 
 
-def _tokenize(batch, tokenizer):
+def _tokenize(batch, tokenizer, model_config):
     """Define the tokenizer arguments.
 
     Arguments:
@@ -91,7 +90,7 @@ def _tokenize(batch, tokenizer):
 
     """
     return tokenizer(
-        batch["Description"],  # with good gpu  use Article text
+        batch[model_config["classifiable_data"]],  # with good gpu  use Article text
         padding=True,
         truncation=True,
         return_tensors="pt",

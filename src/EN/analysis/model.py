@@ -18,14 +18,8 @@ from transformers.modeling_outputs import SequenceClassifierOutput
 
 device = "cuda" if cuda.is_available() else "cpu"
 
-model_ckpt = "distilbert-base-uncased"
 
-
-import torch
-from transformers import AutoTokenizer
-
-
-def bert_model(ds):
+def bert_model(ds, model_config):
     """Produce the encoded data and the model.
 
     Arguments:
@@ -37,13 +31,13 @@ def bert_model(ds):
 
     """
     # Initialize the tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
+    tokenizer = AutoTokenizer.from_pretrained(model_config["model_name"])
 
     # Tokenize the dataset
     ds_encoded = _tokenize_dataset(ds, tokenizer)
     num_labels = 3
     model = BertForMultilabelSequenceClassification.from_pretrained(
-        model_ckpt,
+        model_config["model_name"],
         num_labels=num_labels,
     ).to(device)
 

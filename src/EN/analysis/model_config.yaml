@@ -1,6 +1,11 @@
 ---
-labels: [labor supply, labor demand, government intervention]
-model_name: valhalla/distilbart-mnli-12-6
-classifiable_data: [Article text, Description]
-seed: 42
-batch_size: 8
+# model_name: valhalla/distilbart-mnli-12-6  # can be adjust to your needs, kept small
+classifiable_data: Description # can be changed to "Article text" or "Description"
+seed: 42  # when changed the hand classified evaluation model does not work anymore
+
+# Freely adjustable parameters
+model_name: valhalla/distilbart-mnli-12-6  # can be adjust to your needs, kept small
+batch_size: 16  # adjust to your needs
+epochs: 1  # adjust to your needs
+weight_decay: 0.01  # adjust to your needs
+model_name_pred: distilbert-base-uncased  # adjust to your needs
