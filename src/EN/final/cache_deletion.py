@@ -2,11 +2,6 @@
 
 import os
 
-# def delete_caches_in_directory(directory):
-#    for root, _, files in os.walk(directory):
-#        for file in files:
-#            if file.endswith(".cache"):
-
 
 def delete_caches_in_directory(folder_path):
     """Delete old scrapes to save memory and for overview.

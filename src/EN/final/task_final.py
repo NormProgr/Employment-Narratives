@@ -10,14 +10,23 @@ from EN.final.cache_deletion import delete_caches_in_directory
 from EN.final.plot import table_produce
 
 
-@pytask.mark.skip
+@pytask.mark.skip()
+@pytask.mark.produces(
+    {},
+)
+@pytask.mark.task()  # tried to implement this task but it did not work
+def task_read_cache(produces):
+    """Delete all caches after a run."""
+    delete_caches_in_directory(produces)
+
+
+# @pytask.mark.skip
 @pytask.mark.depends_on(
     {
         "scripts": ["cache_deletion.py"],
         "cache": BLD / "python",
     },
 )
-@pytask.mark.task
 @pytask.mark.produces(
     {},
 )
