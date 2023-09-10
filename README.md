@@ -190,6 +190,26 @@ did not classify a subset of data by hand by yourself for the zero-shot evaluati
 
 ## Appendix
 
+### Appendix A
+
+Zeo-Shot Evaluation:
+
+|     | Class Accuracy                                                 | Mean Accuracy | Class Name                                                    | Count Ones   |
+| --: | :------------------------------------------------------------- | ------------: | :------------------------------------------------------------ | :----------- |
+|   0 | \[0.4492753623188406, 0.8985507246376812, 0.9710144927536232\] |      0.772947 | \['government intervention', 'labor demand', 'labor supply'\] | \[38, 7, 2\] |
+
+### Appendix B
+
+Training size 100:
+
+|     | trained                                                                                                                                                                                                               | eval.eval_loss | eval.eval_accuracy_thresh | eval.eval_runtime | eval.eval_samples_per_second | eval.eval_steps_per_second | eval.epoch |
+| --: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------: | ------------------------: | ----------------: | ---------------------------: | -------------------------: | ---------: |
+|   0 | TrainOutput(global_step=12, training_loss=0.38649340470631915, metrics={'train_runtime': 47.622, 'train_samples_per_second': 5.04, 'train_steps_per_second': 0.252, 'train_loss': 0.38649340470631915, 'epoch': 3.0}) |       0.317368 |                  0.816667 |            0.9154 |                       21.849 |                      1.092 |          3 |
+
+### Appendix C
+
+Training size 1000:
+
 |     | trained                                                                                                                                                                                                                | eval.eval_loss | eval.eval_accuracy_thresh | eval.eval_runtime | eval.eval_samples_per_second | eval.eval_steps_per_second | eval.epoch |
 | --: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------: | ------------------------: | ----------------: | ---------------------------: | -------------------------: | ---------: |
 |   0 | TrainOutput(global_step=120, training_loss=0.3159986178080241, metrics={'train_runtime': 912.944, 'train_samples_per_second': 2.629, 'train_steps_per_second': 0.131, 'train_loss': 0.3159986178080241, 'epoch': 3.0}) |       0.304869 |                  0.821667 |           13.9332 |                       14.354 |                      0.718 |          3 |

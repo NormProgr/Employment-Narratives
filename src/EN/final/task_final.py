@@ -43,7 +43,7 @@ def task_table_produce(depends_on, produces):
     """Produce the readme results to discuss."""
     with open(depends_on["input1"], "rb") as file:
         result1 = pickle.load(file)
-    with open(depends_on["input1"], "rb") as file:
+    with open(depends_on["input2"], "rb") as file:
         result2 = pickle.load(file)
     result1, result2 = table_produce(result1, result2)
 
