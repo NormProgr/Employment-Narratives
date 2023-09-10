@@ -18,10 +18,11 @@ from EN.final.plot import table_produce
     },
 )
 @pytask.mark.task
-# @pytask.mark.produces(
-#    },
+@pytask.mark.produces(
+    {},
+)
 @pytask.mark.task()
-def task_cache_deletion(depends_on):
+def task_cache_deletion(depends_on, produces):
     """Delete all caches after a run."""
     delete_caches_in_directory(depends_on["cache"])
 
