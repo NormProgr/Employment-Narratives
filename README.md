@@ -98,6 +98,8 @@ my initial investigation. II. Addressing challenges encountered, discussing the 
 and assessing project feasibility. III. Presenting the results and offering additional
 insights into the methods and remaining issues.
 
+I. Overview
+
 I have gathered data from CNN archives spanning from 2011 to 2022, totaling 42,000
 unfiltered and unsorted articles encompassing topics such as world news, sports,
 business, economics, and health. For analysis, I employ the
