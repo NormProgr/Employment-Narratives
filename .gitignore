@@ -25,7 +25,6 @@ bld/
 *.run.xml
 *.synctex.gz
 *.zip
-*.csv
 
 
 # files

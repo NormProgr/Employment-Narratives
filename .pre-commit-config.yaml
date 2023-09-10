@@ -93,5 +93,6 @@ repos:
     rev: v2.2.0
     hooks:
       - id: setup-cfg-fmt
+exclude: csv  # Exclude CSV files
 ci:
   autoupdate_schedule: monthly
