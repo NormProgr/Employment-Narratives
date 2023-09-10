@@ -111,7 +111,7 @@ proposal.
 
 II Findings and Discussion
 
-Upon applying zero-shot classification, I attain an average accuracy of 76.2%, with
+Upon applying zero-shot classification, I attain an average accuracy of 77.78%, with
 substantial variations across the different classes. However, these results present
 certain challenges. Notably, government intervention is the most frequently classified
 category (10 out of 100), while labor supply is never identified, achieving a perfect
@@ -287,9 +287,9 @@ III Outlook and further Ideas
 
 Zeo-Shot Evaluation:
 
-|     | Class Accuracy                                   | Mean Accuracy | Class Name                                                    | Count Ones   |
-| --: | :----------------------------------------------- | ------------: | :------------------------------------------------------------ | :----------- |
-|   0 | \[0.35714285714285715, 0.9285714285714286, 1.0\] |      0.761905 | \['government intervention', 'labor demand', 'labor supply'\] | \[10, 1, 0\] |
+|     | Class Accuracy                   | Mean Accuracy | Class Name                                                    | Count Ones   |
+| --: | :------------------------------- | ------------: | :------------------------------------------------------------ | :----------- |
+|   0 | \[0.4, 0.9333333333333333, 1.0\] |      0.777778 | \['government intervention', 'labor demand', 'labor supply'\] | \[10, 1, 0\] |
 
 ### Appendix B
 
