@@ -30,23 +30,19 @@ def _split_dataset(df):
         test_dataset (datasets.Dataset): The test dataset.
 
     """  # delete the validation data
-    df = df.shuffle(seed=42)
+    df = df.shuffle(seed=42)  # change this
 
-    # Calculate the split sizes
     total_size = len(df)
     train_size = int(0.8 * total_size)
-    val_size = int(0.1 * total_size)
+    val_size = int(0.2 * total_size)
     total_size - train_size - val_size
 
-    # Split the dataset
     train_dataset = datasets.Dataset.from_dict(df[:train_size])
     val_dataset = datasets.Dataset.from_dict(df[train_size : train_size + val_size])
-    test_dataset = datasets.Dataset.from_dict(df[train_size + val_size :])
 
     return {
         "train_dataset": train_dataset,
         "val_dataset": val_dataset,
-        "test_dataset": test_dataset,
     }
 
 

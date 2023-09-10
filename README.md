@@ -1,21 +1,5 @@
 # Employment Narratives
 
-## Scope of Project
-
-I provide an economic application to Employment Narratives in global news outlets like
-CNN (Cable News Network) or New York Times and social networks like Twitter. For that I
-will scrape data from Twitter and use some data from
-[Kaggle Datasets](https://www.kaggle.com/datasets/hadasu92/cnn-articles-after-basic-cleaning)
-to access CNN and/or New York Times. After the data is cleaned I will use an NLP model
-for that to work I will classify the data into self set classes like labor supply, labor
-demand, and labor market government interventions. Afterwards I will benchmark the
-performance by testing it on a hand-labelled set. The goal is to examine what reasons
-news outlets see for labor market business cycles or criseses at the time they are
-happening. An interesting extension would be how gould these news are correlating with
-economic papers explaining these phenomenons. This could indicate whether news have
-certain biases explaining labor market phenomenons and how well they perform to evaluate
-them.
-
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/R1vgPUT1)
 
 [![pre-commit.ci passed](https://img.shields.io/badge/pre--commit.ci-passed-brightgreen)](https://results.pre-commit.ci/run/github/274689747/1678058970.SI-lnarDSRqXafVBdLucmg)
@@ -45,6 +29,134 @@ To build the project, type
 ```console
 $ pytask
 ```
+
+## Configuration
+
+The code makes an automated check whether or not you use a CPU or GPU. With a CPU
+automatically a smaller dataset of 100 will be executed. Further configurations are
+stored in `src/EN/analysis/model_config.yaml`. You can freely change the initial
+configurations by:
+
+```console
+classifiable_data: Description # can be changed to "Article text" or keep "Description"
+model_name: valhalla/distilbart-mnli-12-6
+batch_size: 20
+epochs: 3
+weight_decay: 0.01
+model_name_pred: distilbert-base-uncased
+```
+
+Additionally it is possible to change the `seed = 42` which is not recommended if you
+did not classify a subset of data by hand by yourself for the zero-shot evaluation.
+
+## Research proposal
+
+In my research proposal I want to give a first idea how feasible it is to use news
+outlets data and NLP methods to evaluate the publics perception about labor topics.
+Applying these methods allows for new insights about possible information asymmetries
+that influence individuals decision making and bargaining about wages, employment and
+labor market frictions. To conduct this, I classify the news outlets text data into
+three (non-exclusive) categories: Labor Supply, Labor Demand, and Government
+Intervention. These Categories should show which reasons the news outlets identify for
+Labor market related issues. In this context, I draw inspiration from Andre et al.'s
+(2023) paper on "Inflation Narratives," which manually categorizes narratives related to
+inflation. My primary contribution is automating the classification of considerably
+larger datasets. This endeavor aligns with the idea of harnessing extensive language
+data for economic analysis, as advocated by Sendhil Mullainathan and Jann Spiess (2017).
+
+The influence of employment narratives on individuals' decision-making and bargaining
+has already been explored in studies by Kennan (2010) and Walter (2017). Kennan (2010)
+identifies private information as a valid explanation for fluctuations in unemployment.
+These findings have varying implications, depending on whether employers or employees
+possess better information. Walter (2017) delves into how globalization impacts
+individuals' perceptions of labor market frictions and resultant policy shifts. Both
+studies emphasize the significance of individuals' information in shaping real economic
+indicators. My work aligns closely with Garz's 2012 paper, which examines the media's
+coverage and its impact on job insecurity in labor market policies. Garz (2012) analyzes
+handpicked news articles from German media and reveals that a poorly performing labor
+market and high news volume contribute to heightened insecurity perceptions,
+underscoring the importance of understanding microeconomic expectation formation.
+
+My research proposal comprises three main sections: I. Providing a concise overview of
+my initial investigation. II. Addressing challenges encountered, discussing the dataset,
+and assessing project feasibility. III. Presenting the results and offering additional
+insights into the methods and remaining issues.
+
+I. Overview
+
+I have gathered scraped data from CNN archives from
+[Kaggle](https://www.kaggle.com/datasets/hadasu92/cnn-articles-after-basic-cleaning).
+The data is spanning from 2011 to 2022, totaling 42,000 unfiltered and unsorted articles
+encompassing topics such as world news, sports, business, economics, and health. For
+analysis, I employ the
+[Valhalla/distilbart-mnli-12-6](https://huggingface.co/valhalla/distilbart-mnli-12-6)
+transformer model for zero-shot classification, processing a curated subset of 24,000
+data points after filtering out categories like sports, entertainment, and NAs. Given
+the sheer volume of news article text data, I opt to work with shorter summaries
+(description text) of the articles to ensure reasonable processing times. While the
+Facebook/bart-large-mnli model was initially considered and widely used in the Hugging
+Face community for zero-shot classification, I ultimately select the
+[Valhalla/distilbart-mnli-12-6](https://huggingface.co/valhalla/distilbart-mnli-12-6)
+model due to its efficient performance, maintaining 90% accuracy while significantly
+reducing computation time.
+
+To gauge the effectiveness of zero-shot classification, I manually classify a random
+subset of data points and compare the results with those generated by the zero-shot
+classification method. The zero-shot classified data subsequently serves as the training
+dataset for a [distilbert-base-uncased](https://huggingface.co/distilbert-base-uncased)
+model, a more compact and faster version of BERT, well-suited for fine-tuning on
+specific tasks, aligning with my research goals. The trained model can then be applied
+to new, unseen data for similar tasks, although I won't delve into that aspect in this
+proposal.
+
+II Findings and Discussion
+
+Upon applying zero-shot classification, I attain an average accuracy of 76.2%, with
+substantial variations across the different classes. However, these results present
+certain challenges. Notably, government intervention is the most frequently classified
+category (10 out of 100), while labor supply is never identified, achieving a perfect
+accuracy score of 100%. These findings underscore the presence of an imbalanced data
+issue. I attribute this imbalance to two primary factors: Firstly, government
+intervention is a more frequently encountered semantic category compared to labor supply
+and demand. Secondly, CNN encompasses a wide spectrum of news categories, including many
+related to sports and entertainment. To mitigate the impact of this issue, I implement
+data cleaning procedures, ensuring both a substantial dataset in terms of quantity and
+per text. I retain the term "government intervention" due to the potential influence of
+various government interventions on labor market perceptions, although the actual impact
+on labor markets remains subject to debate. Nevertheless, despite these measures, the
+data imbalance persists as a significant challenge.
+
+My second model is based on a pretrained BERT architecture, which I fine-tuned using a
+zero-shot labeled dataset. During this process, I encountered some challenges related to
+the non-exclusive class design I initially adopted. Consequently, I had to modify the
+forward method to better suit this setup. The primary distinction lies in how the loss
+function is calculated and, consequently, how the final layer logits are generated. In
+exclusive class classification, one typically employs a Softmax Cross-Entropy Loss
+function to compute a probability distribution for each class, ensuring that the
+probabilities sum up to 1. However, my approach handles multilabel classification, where
+an input can belong to multiple classes simultaneously. Therefore, I implemented the
+Binary Cross-Entropy Loss function (BCE). BCE treats each label within the multilabel
+class as a binary variable, allowing for values greater than 1 for the entire class.
+Finally, I receive my training results running a subset of 1000 data points an accuracy
+of 82,16% at the third epoch. Considering that the underlying training data might be
+imbalanced I consider the model to perform quite well on the data at hand. Though both
+models are distilbert based, which might account for the high precision. But including
+my zero-shot classification evaluation results I think the overall data is not suitable
+to solve my problem or being applied on new unseen data. In the next part I present some
+ideas how to overcome this problem.
+
+III Outlook and further Ideas
+
+- The need to train LLMs on economic related news (e.g. the Economist) and articles
+  (e.g. American Economic Review Journals) to get a better understanding of economic
+  principles semantics :bulb:
+  - This approach might allow enhance my project because more precise labeling classes
+    for labor related narratives are possible, like Andre et al. (2023) use for
+    Inflation narratives. :memo:
+- I could consider other sources of information besides of classic news media like X
+  (Twitter) or LinkedIn Data :memo:
+- For Inference: link results of labor market papers with the my research approach to
+  get an idea how correct are news understanding labor market topics. :memo:
 
 ## Questions & Answers
 
@@ -169,8 +281,50 @@ $ pytask
 1. What is the fundamental component of the transformer architecture?
    1. The fundamental component is the “Attention” mechanism.
 
+## Appendix
+
+### Appendix A
+
+Zeo-Shot Evaluation:
+
+|     | Class Accuracy                                   | Mean Accuracy | Class Name                                                    | Count Ones   |
+| --: | :----------------------------------------------- | ------------: | :------------------------------------------------------------ | :----------- |
+|   0 | \[0.35714285714285715, 0.9285714285714286, 1.0\] |      0.761905 | \['government intervention', 'labor demand', 'labor supply'\] | \[10, 1, 0\] |
+
+### Appendix B
+
+Training size 100:
+
+|     | trained                                                                                                                                                                                                               | eval.eval_loss | eval.eval_accuracy_thresh | eval.eval_runtime | eval.eval_samples_per_second | eval.eval_steps_per_second | eval.epoch |
+| --: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------: | ------------------------: | ----------------: | ---------------------------: | -------------------------: | ---------: |
+|   0 | TrainOutput(global_step=12, training_loss=0.38649340470631915, metrics={'train_runtime': 47.622, 'train_samples_per_second': 5.04, 'train_steps_per_second': 0.252, 'train_loss': 0.38649340470631915, 'epoch': 3.0}) |       0.317368 |                  0.816667 |            0.9154 |                       21.849 |                      1.092 |          3 |
+
+### Appendix C
+
+Training size 1000:
+
+|     | trained                                                                                                                                                                                                                | eval.eval_loss | eval.eval_accuracy_thresh | eval.eval_runtime | eval.eval_samples_per_second | eval.eval_steps_per_second | eval.epoch |
+| --: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------: | ------------------------: | ----------------: | ---------------------------: | -------------------------: | ---------: |
+|   0 | TrainOutput(global_step=120, training_loss=0.3159986178080241, metrics={'train_runtime': 912.944, 'train_samples_per_second': 2.629, 'train_steps_per_second': 0.131, 'train_loss': 0.3159986178080241, 'epoch': 3.0}) |       0.304869 |                  0.821667 |           13.9332 |                       14.354 |                      0.718 |          3 |
+
 ## Credits
 
 This project was created with [cookiecutter](https://github.com/audreyr/cookiecutter)
 and the
 [econ-project-templates](https://github.com/OpenSourceEconomics/econ-project-templates).
+
+## References
+
+- Andre, Peter and Haaland, Ingar and Roth, Christopher and Wohlfart, Johannes,
+  Narratives About the Macroeconomy (2023). CESifo Working Paper No. 10535, Available at
+  SSRN: https://ssrn.com/abstract=4506321 or http://dx.doi.org/10.2139/ssrn.4506321
+- Garz, M. Job Insecurity Perceptions and Media Coverage of Labor Market Policy. J Labor
+  Res 33, 528–544 (2012). https://doi.org/10.1007/s12122-012-9146-9
+- Kennan, John, Private Information, Wage Bargaining and Employment Fluctuations, The
+  Review of Economic Studies, Volume 77, Issue 2, April 2010, Pages 633–664,
+  https://doi.org/10.1111/j.1467-937X.2009.00580.x
+- Mullainathan, Sendhil, and Jann Spiess. "Machine learning: an applied econometric
+  approach." Journal of Economic Perspectives 31.2 (2017): 87-106.
+- Walter, S. (2017). Globalization and the Demand-Side of Politics: How Globalization
+  Shapes Labor Market Risk Perceptions and Policy Preferences. Political Science
+  Research and Methods, 5(1), 55-80. doi:10.1017/psrm.2015.64

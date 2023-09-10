@@ -1,0 +1,11 @@
+---
+# Fixed parameters
+seed: 42  # when changed the hand classified evaluation model does not work anymore
+
+# Freely adjustable parameters
+classifiable_data: Description # can be changed to "Article text" or keep "Description"
+model_name: valhalla/distilbart-mnli-12-6  # can be adjust to your needs, kept small
+batch_size: 20  # adjust to your needs
+epochs: 3  # adjust to your needs
+weight_decay: 0.01  # adjust to your needs
+model_name_pred: distilbert-base-uncased  # adjust to your needs

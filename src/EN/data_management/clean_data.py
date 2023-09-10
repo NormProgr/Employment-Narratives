@@ -59,15 +59,6 @@ def _drop_columns(data, data_info):
         ~data[data_info["column_name"]].isin(data_info["values_to_remove"])
     ]
 
-    # Filter rows based on the "Section" column
-    if "Section" in data.columns:
-        filtered_df = filtered_df[
-            ~filtered_df["Section"].isin(data_info["values_to_remove"])
-        ]
-
-    # Drop specified columns
-    data = data.drop(columns=data_info["columns_to_drop"])
-
     return filtered_df
 
 

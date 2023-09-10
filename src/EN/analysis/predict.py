@@ -16,46 +16,31 @@ from transformers import (
 )
 
 device = "cuda" if cuda.is_available() else "cpu"
-model_ckpt = "distilbert-base-uncased"
 
 
-import torch
-from transformers import (
-    AutoTokenizer,
-    Trainer,
-    TrainingArguments,
-)
-
-
-def create_and_train_model(
-    train_dataset,
-    eval_dataset,
-    model,
-    batch_size=8,
-    num_train_epochs=1,
-):
+def create_and_train_model(train_dataset, eval_dataset, model, model_config):
     """Train the model and define its arguments.
 
     Args:
         train_dataset (Dataset): Training dataset containing input features and labels.
         eval_dataset (Dataset): Evaluation dataset containing input features and labels.
         model (PreTrainedModel): The pre-trained model to fine-tuning.
-        batch_size (int): Batch size for training and evaluation.
-        num_train_epochs (int): Number of training epochs.
+        model_config (dict): The model configuration.
 
     Returns:
         Trainer: A trainer object configured for training the model.
 
     """
-    tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
+    tokenizer = AutoTokenizer.from_pretrained(model_config["model_name_pred"])
     args = TrainingArguments(
         output_dir="jigsaw",
         evaluation_strategy="epoch",
         learning_rate=2e-5,
-        per_device_train_batch_size=batch_size,
-        per_device_eval_batch_size=batch_size,
-        num_train_epochs=num_train_epochs,
-        weight_decay=0.01,
+        per_device_train_batch_size=model_config["batch_size"],
+        per_device_eval_batch_size=model_config["batch_size"],
+        num_train_epochs=model_config["epochs"],
+        weight_decay=model_config["weight_decay"],
+        optim="adamw_torch",
     )
 
     trainer = Trainer(
