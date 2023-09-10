@@ -158,7 +158,7 @@ III Outlook and further Ideas
   - Using data that is pre-trained on economic articles might improve my project
     performance because I could use finer labelling classes to get more in-depth
     insights, like Andre et al. (2023) get it in Inflation narratives. :memo:
-- I could consider other sources of information besides of classic news media like X
+- I could consider other sources of information besides the classic news media like X
   (Twitter) or LinkedIn Data :memo:
 - For Inference: link results of labor market papers with the my research approach to
   get an idea how correct are news understanding labor market topics. :memo:
