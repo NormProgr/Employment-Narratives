@@ -209,7 +209,7 @@ III Outlook and further Ideas
 1. How can you write pytorch code that uses a GPU if it is available but also runs on a
    laptop that does not have a GPU.
    1. If you run the following code and check which state is true GPU or CPU. You are
-      able to run it on all machines.`import torch` and
+      able to run the Code on a GPU.`import torch` and
       `torch.device("cuda" if torch.cuda.is_available() else "cpu")`
 1. How many trainable parameters would the neural network in this video have if we
    remove the second hidden layer but leave it otherwise unchanged.
@@ -251,8 +251,8 @@ III Outlook and further Ideas
    simpler encoder only architecture we used for language modelling)
    1. The encoder-decoder architecture is employed in machine translation to
       comprehensively understand source sentences bidirectionally. The encoder captures
-      semantic meaning, while the decoder translates. Unlike simpler encoders, this
-      approach grasps context, idiomatic expressions, and linguistic nuances.
+      semantic meaning, while the decoder translates. Unlike simpler encoders they can
+      handle input and output variables with differing length.
 1. Is it a good idea to base your final project on a paper or blogpost from 2015? Why or
    why not?
    1. If the paper or blogpost had computational or methodological limitations but
