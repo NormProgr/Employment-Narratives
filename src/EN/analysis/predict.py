@@ -40,6 +40,7 @@ def create_and_train_model(train_dataset, eval_dataset, model, model_config):
         per_device_eval_batch_size=model_config["batch_size"],
         num_train_epochs=model_config["epochs"],
         weight_decay=model_config["weight_decay"],
+        optim="adamw_torch",
     )
 
     trainer = Trainer(
