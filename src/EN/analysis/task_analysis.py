@@ -50,7 +50,7 @@ def task_zero_shot(depends_on, produces):
         total_examples = len(
             data,
         )  # Replace "train" with the split you want to use (e.g., "test", "validation").
-        random_indices = random.sample(range(total_examples), 100)
+        random_indices = random.sample(range(total_examples), 1000)
         first_100_entries = data.select(random_indices)
         labeled_data = zero_shot_classifier(first_100_entries, model_config)
     labeled_data.save_to_disk(produces)

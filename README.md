@@ -188,6 +188,12 @@ did not classify a subset of data by hand by yourself for the zero-shot evaluati
 1. What is the fundamental component of the transformer architecture?
    1. The fundamental component is the “Attention” mechanism.
 
+## Appendix
+
+|     | trained                                                                                                                                                                                                                | eval.eval_loss | eval.eval_accuracy_thresh | eval.eval_runtime | eval.eval_samples_per_second | eval.eval_steps_per_second | eval.epoch |
+| --: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------: | ------------------------: | ----------------: | ---------------------------: | -------------------------: | ---------: |
+|   0 | TrainOutput(global_step=120, training_loss=0.3159986178080241, metrics={'train_runtime': 912.944, 'train_samples_per_second': 2.629, 'train_steps_per_second': 0.131, 'train_loss': 0.3159986178080241, 'epoch': 3.0}) |       0.304869 |                  0.821667 |           13.9332 |                       14.354 |                      0.718 |          3 |
+
 ## Credits
 
 This project was created with [cookiecutter](https://github.com/audreyr/cookiecutter)
