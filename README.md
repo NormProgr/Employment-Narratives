@@ -320,3 +320,17 @@ Training size 1000:
 This project was created with [cookiecutter](https://github.com/audreyr/cookiecutter)
 and the
 [econ-project-templates](https://github.com/OpenSourceEconomics/econ-project-templates).
+
+## References
+
+- Andre, Peter and Haaland, Ingar and Roth, Christopher and Wohlfart, Johannes,
+  Narratives About the Macroeconomy (2023). CESifo Working Paper No. 10535, Available at
+  SSRN: https://ssrn.com/abstract=4506321 or http://dx.doi.org/10.2139/ssrn.4506321
+- Garz, M. Job Insecurity Perceptions and Media Coverage of Labor Market Policy. J Labor
+  Res 33, 528–544 (2012). https://doi.org/10.1007/s12122-012-9146-9
+- Kennan, John, Private Information, Wage Bargaining and Employment Fluctuations, The
+  Review of Economic Studies, Volume 77, Issue 2, April 2010, Pages 633–664,
+  https://doi.org/10.1111/j.1467-937X.2009.00580.x
+- Walter, S. (2017). Globalization and the Demand-Side of Politics: How Globalization
+  Shapes Labor Market Risk Perceptions and Policy Preferences. Political Science
+  Research and Methods, 5(1), 55-80. doi:10.1017/psrm.2015.64
