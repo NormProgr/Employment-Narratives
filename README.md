@@ -194,9 +194,9 @@ did not classify a subset of data by hand by yourself for the zero-shot evaluati
 
 Zeo-Shot Evaluation:
 
-|     | Class Accuracy                                                 | Mean Accuracy | Class Name                                                    | Count Ones   |
-| --: | :------------------------------------------------------------- | ------------: | :------------------------------------------------------------ | :----------- |
-|   0 | \[0.4492753623188406, 0.8985507246376812, 0.9710144927536232\] |      0.772947 | \['government intervention', 'labor demand', 'labor supply'\] | \[38, 7, 2\] |
+|     | Class Accuracy                                   | Mean Accuracy | Class Name                                                    | Count Ones   |
+| --: | :----------------------------------------------- | ------------: | :------------------------------------------------------------ | :----------- |
+|   0 | \[0.35714285714285715, 0.9285714285714286, 1.0\] |      0.761905 | \['government intervention', 'labor demand', 'labor supply'\] | \[10, 1, 0\] |
 
 ### Appendix B
 

@@ -42,9 +42,10 @@ def calculate_accuracy_scores(hand_class, data):
     merged_df[["government intervention", "labor supply", "labor demand"]] = merged_df[
         ["government intervention", "labor supply", "labor demand"]
     ].applymap(_zero_one_transform)
+
     predicted_labels = merged_df[
         ["government intervention true", "labor demand true", "labor supply true"]
-    ].fillna(0)
+    ]  # .fillna(0)
 
     true_labels = merged_df[["government intervention", "labor demand", "labor supply"]]
 
