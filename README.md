@@ -236,7 +236,8 @@ III Outlook and further Ideas
 1. What happens when the batch size during the optimization is set too small?
    1. When the batch size becomes too small, updates to the model's parameters become
       erratic, leading to unpredictable and inconsistent changes during each
-      optimization iteration. But also the optimization is computational fast.
+      optimization iteration. It may also lead to noisier gradients as the small batches
+      do not represent the data well.
 1. What happens when the batch size diring the optimization is set too large?
    1. Too large batch sizes lead to overfitting of the model. It also requires a lot
       more computational power.
