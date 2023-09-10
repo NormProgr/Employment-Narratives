@@ -74,60 +74,70 @@ that influence individuals decision making and bargaining about wages, employmen
 labor market frictions. To conduct this, I classify the news outlets text data into
 three (non-exclusive) categories: Labor Supply, Labor Demand, and Government
 Intervention. These Categories should show which reasons the news outlets identify for
-Labor market related issues. In this regard I follow the paper “Inflation Narratives” of
-Andre et al. (2023) that classifies the narratives for inflation by hand. My main
-contribution is to solve classification problems of unseen significant larger datasets
-automated. Finally, this is aimed to make a useful contribution of large language data
-in economics as Sendhil Mullainathan and Jann Spiess (2017) propose. That employment
-narratives influence individuals decision making and bargaining was already discussed by
-papers of Kennan (2010) or Walter (2017). Kennan (2010) finds that private Information a
-valid explanation for unemployment volatility. The results have different implication
-whether employer or employee are better informed. Walter (2017) investigates
-globalizations effect on individuals perceptions about labor market frictions and
-resulting policy changes. Both papers highlight the importance of individuals
-information on labor markets as influencing real economic Indicators. Garz 2012 is the
-paper closest to my contribution discussing the media coverage and job insecurity on
-Labor market policies. Garz (2012) uses hand picked news articles of german news media
-and finds that a badly performing labor market and high news volume leads to increased
-insecurity perceptions. Thus marking the importance to understand microeconomic
-expectation formations. My research proposal consists of three parts: I. I give a brief
-overview how I conduct my first investigation. In Part II I discuss problems I face and
-comment about the data and the feasibility of the project. In Part III I describe and
-evaluate my results. Additionally, I will give further ideas about the methods and
-problems at hand. I Overview I use scraped CNN data pulled from kaggle from 2011 to 2022
-containing 42.000 unfiltered and unsorted articles about topics like world news, sport,
-business, economics, or health. I use the transformer based
-valhalla/distilbart-mnli-12-6 model to zero-shot classify a suitable set of 24000 unseen
-datapoints. This subset was cleaned from category like sports, entertainment and NAs. As
-the News Article Text data is too large to be solved by my computational means in a
-reasonable time I use a subset of the Description text data, which is a smaller summary
-of the Articles. Initially I used the facebook/bart-large-mnli that is often recommended
-and used within the huggingface community for zero-shot-classification problems (Link)
-though I decided for the valhalla/distilbart-mnli-12-6. It still holds 90% of the models
-accuracy with being significant faster and feasible for my computational means. To get
-an idea how well the zero-shot classification performs I classify a small set of
-randomized datapoints by hand and compare it to the zero-shot classified data. The
-zero-shot classified data is then used to train a distilbert-base-uncased model, a
-smaller and faster version of BERT (https://huggingface.co/distilbert-base-uncased).
-This transformer based model is recommended for fine-tuning on specific tasks, which is
-exactly what I am using it for (https://huggingface.co/distilbert-base-uncased). The
-trained model is then ideal to be applied on new unseen data to solve similar problems,
-though I will not go so far. II Findings and Discussion When applying my zero-shot
-classification I get an average accuracy of 76.2% with quite differing results across
-the classes. This result is quite flawed as government intervention is classified the
-most (10/100) and labor supply is never identified and has an accuracy of 100%. These
-findings are strong arguments to assume an imbalanced data problem here. I argue two
-reasons for this imbalance: First, government intervention is a more commonly used
-semantic category than labor supply and demand. Second, CNN has a wide range of news
-categories covered where a lot of them are related to sport or entertainment. To
-decrease the impact of this problem I clean the data and have a considerable size of
-data in quantity but also per text. I keep the word “government intervention” as it is
-because a lot of different kinds of government interventions can have an effect on labor
-market perceptions thought it is debatable how many government interventions have a real
-effect on labor markets. Even with this measures the imbalance is problematic. My second
-model is based on a pretrained BERT architecture, which I fine-tuned using a zero-shot
-labeled dataset. During this process, I encountered some challenges related to the
-non-exclusive class design I initially adopted. Consequently, I had to modify the
+Labor market related issues. In this context, I draw inspiration from Andre et al.'s
+(2023) paper on "Inflation Narratives," which manually categorizes narratives related to
+inflation. My primary contribution is automating the classification of considerably
+larger datasets. This endeavor aligns with the idea of harnessing extensive language
+data for economic analysis, as advocated by Sendhil Mullainathan and Jann Spiess (2017).
+
+The influence of employment narratives on individuals' decision-making and bargaining
+has already been explored in studies by Kennan (2010) and Walter (2017). Kennan (2010)
+identifies private information as a valid explanation for fluctuations in unemployment.
+These findings have varying implications, depending on whether employers or employees
+possess better information. Walter (2017) delves into how globalization impacts
+individuals' perceptions of labor market frictions and resultant policy shifts. Both
+studies emphasize the significance of individuals' information in shaping real economic
+indicators. My work aligns closely with Garz's 2012 paper, which examines the media's
+coverage and its impact on job insecurity in labor market policies. Garz (2012) analyzes
+handpicked news articles from German media and reveals that a poorly performing labor
+market and high news volume contribute to heightened insecurity perceptions,
+underscoring the importance of understanding microeconomic expectation formation.
+
+My research proposal comprises three main sections: I. Providing a concise overview of
+my initial investigation. II. Addressing challenges encountered, discussing the dataset,
+and assessing project feasibility. III. Presenting the results and offering additional
+insights into the methods and remaining issues.
+
+I have gathered data from CNN archives spanning from 2011 to 2022, totaling 42,000
+unfiltered and unsorted articles encompassing topics such as world news, sports,
+business, economics, and health. For analysis, I employ the
+Valhalla/distilbart-mnli-12-6 transformer model for zero-shot classification, processing
+a curated subset of 24,000 data points after filtering out categories like sports,
+entertainment, and NAs. Given the sheer volume of news article text data, I opt to work
+with shorter summaries (description text) of the articles to ensure reasonable
+processing times. While the Facebook/bart-large-mnli model was initially considered and
+widely used in the Hugging Face community for zero-shot classification, I ultimately
+select the Valhalla/distilbart-mnli-12-6 model due to its efficient performance,
+maintaining 90% accuracy while significantly reducing computation time.
+
+To gauge the effectiveness of zero-shot classification, I manually classify a random
+subset of data points and compare the results with those generated by the zero-shot
+classification method. The zero-shot classified data subsequently serves as the training
+dataset for a distilbert-base-uncased model, a more compact and faster version of BERT,
+well-suited for fine-tuning on specific tasks, aligning with my research goals. The
+trained model can then be applied to new, unseen data for similar tasks, although I
+won't delve into that aspect in this proposal.
+
+II Findings and Discussion
+
+Upon applying zero-shot classification, I attain an average accuracy of 76.2%, with
+substantial variations across the different classes. However, these results present
+certain challenges. Notably, government intervention is the most frequently classified
+category (10 out of 100), while labor supply is never identified, achieving a perfect
+accuracy score of 100%. These findings underscore the presence of an imbalanced data
+issue. I attribute this imbalance to two primary factors: Firstly, government
+intervention is a more frequently encountered semantic category compared to labor supply
+and demand. Secondly, CNN encompasses a wide spectrum of news categories, including many
+related to sports and entertainment. To mitigate the impact of this issue, I implement
+data cleaning procedures, ensuring both a substantial dataset in terms of quantity and
+per text. I retain the term "government intervention" due to the potential influence of
+various government interventions on labor market perceptions, although the actual impact
+on labor markets remains subject to debate. Nevertheless, despite these measures, the
+data imbalance persists as a significant challenge.
+
+My second model is based on a pretrained BERT architecture, which I fine-tuned using a
+zero-shot labeled dataset. During this process, I encountered some challenges related to
+the non-exclusive class design I initially adopted. Consequently, I had to modify the
 forward method to better suit this setup. The primary distinction lies in how the loss
 function is calculated and, consequently, how the final layer logits are generated. In
 exclusive class classification, one typically employs a Softmax Cross-Entropy Loss
@@ -141,13 +151,14 @@ of 82,16% at the third epoch. Considering that the underlying training data migh
 imbalanced I consider the model to perform quite well on the data at hand. But including
 my zero-shot classification evaluation results I think the overall data is not suitable
 to solve my problem. In the next part I present some ideas how to overcome this problem.
+
 III Outlook and further Ideas
 
 - The need to train LLMs on economic related news (e.g. the Economist) and articles
   (e.g. American Economic Review Journals) to get a better understanding of economic
-  principles semantics (lightbulb emoji) o This approach might allow for more precise
-  labeling classes for labor related narratives, like Andre et al. (2023) use for
-  Inflation narratives (Noteboard emoji)
+  principles semantics (lightbulb emoji)
+  - This approach might allow for more precise labeling classes for labor related
+    narratives, like Andre et al. (2023) use for Inflation narratives (Noteboard emoji)
 - Consider other sources of information besides of classic news media like X (Twitter)
   or LinkedIn Data (Noteboard emoji)
 - For Inference: link results of labor market papers with the my research approach to
