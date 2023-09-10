@@ -31,6 +31,7 @@ dependencies:
   # sklearn
   - scikit-learn
   - scikit-image
+  - tabulate
 
   # huggingface
   - transformers
@@ -46,7 +47,6 @@ dependencies:
       - -e .
       - kaleido
       - transformers[torch]  # needed?
-      - accelerate -U  # needed?
       - accelerate>=0.20.1  # needed?
       - xformers
       - tabulate

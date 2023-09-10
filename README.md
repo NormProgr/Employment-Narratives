@@ -80,9 +80,9 @@ market and high news volume contribute to heightened insecurity perceptions,
 underscoring the importance of understanding microeconomic expectation formation.
 
 My research proposal comprises three main sections: I. Providing a concise overview of
-my initial investigation. II. Addressing challenges encountered, discussing the dataset,
-and assessing project feasibility. III. Presenting the results and offering additional
-insights into the methods and remaining issues.
+my project. II. Addressing challenges encountered, presenting the results, and assessing
+project feasibility. III. Suggestion new approaches and extensions to enhance my
+research project.
 
 I. Overview
 
