@@ -10,7 +10,7 @@ from EN.final.cache_deletion import delete_caches_in_directory
 from EN.final.plot import table_produce
 
 
-@pytask.mark.skip
+@pytask.mark.skip  # fix cache?
 @pytask.mark.depends_on(
     {
         "scripts": ["cache_deletion.py"],
