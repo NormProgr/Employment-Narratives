@@ -142,19 +142,22 @@ class as a binary variable, allowing for values greater than 1 for the entire cl
 Finally, I receive my training results running a subset of 1000 data points an accuracy
 of 82,16% at the third epoch. Considering that the underlying training data might be
 imbalanced I consider the model to perform quite well on the data at hand. Though both
-models are distilbert based, which might account for the high precision. But including
-my zero-shot classification evaluation results I think the overall data is not suitable
-to solve my problem or being applied on new unseen data. In the next part I present some
-ideas how to overcome this problem.
+models are distilbert based, which might account for the high precision. I conclude,
+considering my zero-shot classification evaluation results, that the underlying data and
+the fine-tuned model is not suitable to solve my problem or being applied on new unseen
+data. I think the main improvement can be achieved by using other data instead of the
+CNN data. I find it noteworthy that the zero-shot model works quite well for that it is
+possible to input arbitrary kind of labels. In the next part I present some ideas how to
+overcome this problem.
 
 III Outlook and further Ideas
 
-- The need to train LLMs on economic related news (e.g. the Economist) and articles
+- The is a need to train LLMs on economic related news (e.g. the Economist) and articles
   (e.g. American Economic Review Journals) to get a better understanding of economic
   principles semantics :bulb:
-  - This approach might allow enhance my project because more precise labeling classes
-    for labor related narratives are possible, like Andre et al. (2023) use for
-    Inflation narratives. :memo:
+  - Using data that is pre-trained on economic articles might improve my project
+    performance because I could use finer labelling classes to get more in-depth
+    insights, like Andre et al. (2023) get it in Inflation narratives. :memo:
 - I could consider other sources of information besides of classic news media like X
   (Twitter) or LinkedIn Data :memo:
 - For Inference: link results of labor market papers with the my research approach to
