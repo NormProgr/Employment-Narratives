@@ -156,10 +156,10 @@ class as a binary variable, allowing for values greater than 1 for the entire cl
 Finally, I receive my training results running a subset of 1000 data points an accuracy
 of 82,16% at the third epoch. Considering that the underlying training data might be
 imbalanced I consider the model to perform quite well on the data at hand. Though both
-models I use are distilbert based, which might account for the high precision. But
-including my zero-shot classification evaluation results I think the overall data is not
-suitable to solve my problem. In the next part I present some ideas how to overcome this
-problem.
+models are distilbert based, which might account for the high precision. But including
+my zero-shot classification evaluation results I think the overall data is not suitable
+to solve my problem or being applied on new unseen data. In the next part I present some
+ideas how to overcome this problem.
 
 III Outlook and further Ideas
 
