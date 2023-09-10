@@ -158,13 +158,13 @@ III Outlook and further Ideas
 
 - The need to train LLMs on economic related news (e.g. the Economist) and articles
   (e.g. American Economic Review Journals) to get a better understanding of economic
-  principles semantics (lightbulb emoji)
+  principles semantics :bulb:
   - This approach might allow for more precise labeling classes for labor related
-    narratives, like Andre et al. (2023) use for Inflation narratives (Noteboard emoji)
+    narratives, like Andre et al. (2023) use for Inflation narratives :memo:
 - Consider other sources of information besides of classic news media like X (Twitter)
-  or LinkedIn Data (Noteboard emoji)
+  or LinkedIn Data :memo:
 - For Inference: link results of labor market papers with the my research approach to
-  get an idea how correct are news understanding labor market topics. (Noteboard emoji)
+  get an idea how correct are news understanding labor market topics. :memo:
 
 ## Questions & Answers
 
